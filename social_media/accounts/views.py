@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 
+from .forms import RegisterForm
+
 
 def login_account(request):
     # If form has been submitted
@@ -30,3 +32,23 @@ def logout_account(request):
     logout(request)
     messages.warning(request, 'You were logged out')
     return redirect('home')
+
+def register_account(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+            login(request, user)
+
+            return redirect('home')
+        else:
+            messages.error(request, form.error_messages)
+    else:
+        form = RegisterForm()
+    
+    return render(request, 'accounts/register.html', {
+        'form': form,
+    })
