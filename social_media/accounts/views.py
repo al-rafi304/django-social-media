@@ -25,3 +25,8 @@ def login_account(request):
     # Landing page
     else:
         return render(request, 'accounts/login.html', {})
+    
+def logout_account(request):
+    logout(request)
+    messages.warning(request, 'You were logged out')
+    return redirect('home')
