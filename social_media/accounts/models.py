@@ -8,10 +8,10 @@ class Account(AbstractUser):
     lName = models.CharField(max_length=50)
     dob = models.DateField(null=True)
     bio = models.CharField(max_length=160)
-    phone = models.CharField(max_length = 50)
-    hometown = models.CharField(max_length=100)
+    phone = models.CharField(max_length = 50, null=True)
+    hometown = models.CharField(max_length=100, null=True)
     address = models.TextField(null=True)
-    occupation = models.CharField(max_length=160)
+    occupation = models.CharField(max_length=160, null=True)
 
     SINGLE = 'SN'
     MINGLE = 'IR'
@@ -25,7 +25,7 @@ class Account(AbstractUser):
         (COMPLICATED, "It's complicated")
     ]
 
-    relationshipStatus = models.CharField(max_length = 2, choices = RELATIONSHIP_CHOICES, default = SINGLE)
+    relationshipStatus = models.CharField(max_length = 2, choices = RELATIONSHIP_CHOICES, default = None, null=True)
 
     # profile_img = models.ImageField(upload_to='images/', blank=False)
     # cover_img = models.ImageField(upload_to='image/', null=True, blank=True)
