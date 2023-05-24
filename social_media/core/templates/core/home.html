@@ -1,9 +1,29 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
+<div class='container'>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            {% comment %} <label class="form-label">Want to share something?</label> {% endcomment %}
+            <textarea class="form-control" name="post-text" rows="4" placeholder="Want to share something?" style="resize: none"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary rounded-pill w-100">Post</button>
+    </form>
+</div>
+<br>
+<div class='container'>
 
+    {% for post in posts %}
 
-    <h1>Hello World !</h1>
+            <div class='container border rounded'>
+                <b>@{{ post.account.username }}</b> - {{ post.posted_at|date:"d F" }}
+                <br>
+                {{ post.text|linebreaksbr }}
+            </div>
+            <br>
 
+    {% endfor %}
 
+</div>
 {% endblock content %}
