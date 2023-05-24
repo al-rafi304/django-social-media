@@ -18,6 +18,8 @@ class Follow(models.Model):
     and allow you to access the relationships without conflicts.
     """
 
+    followed_at = models.DateTimeField(auto_now_add=True)
+
 class Post(models.Model):
     account = models.ForeignKey(Account, on_delete = models.CASCADE)
     
@@ -26,12 +28,16 @@ class Post(models.Model):
     commentCount = models.IntegerField(default = 0)
     # photo = models.ImageField()
 
+    posted_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self) -> str:
         return f"{self.text[:50]}..."
 
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete = models.CASCADE)
     account = models.ForeignKey(Account, on_delete = models.CASCADE)
+
+    liked_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"'{self.post.text[:15]}...' liked by {self.account.username}"
@@ -41,6 +47,8 @@ class Comment(models.Model):
     account = models.ForeignKey(Account, on_delete = models.CASCADE)
     
     comment = models.TextField()
+
+    commented_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"'{self.comment[:50]}...' commented by '{self.account.username}' on '{self.post.text[:15]}..'"
