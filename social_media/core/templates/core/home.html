@@ -1,11 +1,12 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
+
+<!--Post Prompt-->
 <div class='container'>
-    <form method="POST">
+    <form method="POST" action="{% url 'post' %}">
         {% csrf_token %}
         <div class="mb-3">
-            {% comment %} <label class="form-label">Want to share something?</label> {% endcomment %}
             <textarea class="form-control" name="post-text" rows="4" placeholder="Want to share something?" style="resize: none"></textarea>
         </div>
         <button type="submit" class="btn btn-primary rounded-pill w-100">Post</button>
@@ -14,14 +15,42 @@
 <br>
 <div class='container'>
 
-    {% for post in posts %}
-
-            <div class='container border rounded'>
-                <b>@{{ post.account.username }}</b> - {{ post.posted_at|date:"d F" }}
+    {% for element in post_element %}
+            
+        <div class='container border rounded bg-light p-3'>
+            <!--Post-->
+            <div>
+                <b>@{{ element.post.account.username }}</b> - {{ element.post.posted_at|date:"d F" }}
                 <br>
-                {{ post.text|linebreaksbr }}
+                {{ element.post.text|linebreaksbr }}
             </div>
-            <br>
+            <hr>
+            <!--Comment Prompt-->
+            <form method='POST' action="{% url 'comment' post_id=element.post.id %}">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" name="comment-text" class="form-control rounded-pill" placeholder="Enter Comment..." aria-describedby="button-addon2">
+                    <div class='p-1'></div>
+                    <button class="btn btn-outline-secondary rounded-pill" type="submit" id="button-addon2">Comment</button>
+                </div>
+            </form>
+            <!--All comments-->
+            <div>
+                {% for comment in element.comments %}
+                    <div class='container'>
+                        <div class='col mt-3'>
+                            <div class='row rounded-5 pt-3' style="background-color: #EEEEEE; word-wrap: break-word;">
+                                <p><b>@{{ comment.account.username }}</b> - {{ comment.comment }}</p>
+                            </div>
+                            <div class='row mx-3'>
+                                {{ comment.commented_at|date:"d F H:i" }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <br>
 
     {% endfor %}
 
