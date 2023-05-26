@@ -47,6 +47,7 @@ def comment(request, post_id):
         comment.save()
 
         post.commentCount += 1
+        post.save()
     return redirect('home')
 
 def like(request, post_id):
