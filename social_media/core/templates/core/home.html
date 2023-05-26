@@ -24,7 +24,27 @@
                 <br>
                 {{ element.post.text|linebreaksbr }}
             </div>
-            <hr>
+
+            <hr class='mb-0'>
+
+            <!--Like Button-->
+            <div class='row mt-0'>
+                    <a type='button' href="{% url 'like' post_id=element.post.id %}" class='col btn btn-light m-2 border-0 rounded-3'>
+                        {% if element.liked %}
+                            <i class="bi bi-heart-fill"></i>
+                        {% else %}
+                            <i class="bi bi-heart"></i>
+                        {% endif %}
+                        <span>{{ element.post.likeCount }}</span>
+                    </a>
+                    <a type='button' class='col btn btn-light m-2 border-0 rounded-3'>
+                        <i class="bi bi-chat"></i>
+                    </a>
+                    <a type='button' class='col btn btn-light m-2 border-0 rounded-3'>
+                        <i class="bi bi-share"></i>
+                    </a>
+            </div>
+
             <!--Comment Prompt-->
             <form method='POST' action="{% url 'comment' post_id=element.post.id %}">
                 {% csrf_token %}
@@ -34,6 +54,7 @@
                     <button class="btn btn-outline-secondary rounded-pill" type="submit" id="button-addon2">Comment</button>
                 </div>
             </form>
+
             <!--All comments-->
             <div>
                 {% for comment in element.comments %}
