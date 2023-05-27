@@ -2,54 +2,67 @@
 
 {% block content %}
 
-<!--Post Prompt-->
 <div class='container'>
-    <form method="POST" action="{% url 'post' %}">
-        {% csrf_token %}
-        <div class="mb-3">
-            <textarea class="form-control" name="post-text" rows="4" placeholder="Want to share something?" style="resize: none"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary rounded-pill w-100">Post</button>
-    </form>
-</div>
-<br>
-<div class='container'>
+
+    <!--Post Prompt-->
+    <div class='container'>
+        <form method="POST" action="{% url 'post' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <textarea class="form-control" name="post-text" rows="4" placeholder="Want to share something?" style="resize: none"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary rounded-pill w-100">Post</button>
+        </form>
+    </div>
+    <br>
 
     {% for element in post_element %}
             
-        <div class='container border rounded bg-light p-3'>
+        <div class='container border rounded-4 bg-light p-3 shadow-sm'>
             <!--Post-->
             <div>
-                <b>@{{ element.post.account.username }}</b> - {{ element.post.posted_at|date:"d F" }}
-                <br>
-                {{ element.post.text|linebreaksbr }}
+                <div class='row mb-2'>
+                    <div class='col-auto'>
+                        <img src="{{ element.post.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="40" height="40">
+                    </div>
+                    <div class='col ps-0'>
+                        <span><b>{{ element.post.account.first_name }} {{ element.post.account.last_name }}</b> - {{ element.post.posted_at|date:"d F" }}</span>
+                        <br>
+                        <span class='text-secondary'>@{{ element.post.account.username }}</span>
+                    </div>
+                </div>
+                <div>
+                    {{ element.post.text|linebreaksbr }}
+                </div>
             </div>
 
             <hr class='mb-0'>
-
+            
             <!--Interaction Buttons-->
             <div class='row mt-0'>
                 <!--Like Button-->
                 <a type='button' href="{% url 'like' post_id=element.post.id %}" class='col btn btn-light m-2 border-0 rounded-3'>
                     {% if element.liked %}
-                        <i class="bi bi-heart-fill"></i>
+                    <i class="bi bi-heart-fill"></i>
                     {% else %}
-                        <i class="bi bi-heart"></i>
+                    <i class="bi bi-heart"></i>
                     {% endif %}
                     <span>{{ element.post.likeCount }}</span>
                 </a>
-
+                
                 <!--Comment Button-->
                 <a type='button' class='col btn btn-light m-2 border-0 rounded-3'>
                     <i class="bi bi-chat"></i>
                     <span>{{ element.post.commentCount }}</span>
                 </a>
-
+                
                 <!--Share Button-->
                 <a type='button' class='col btn btn-light m-2 border-0 rounded-3'>
                     <i class="bi bi-share"></i>
                 </a>
             </div>
+            
+            <hr class='mt-0'>
 
             <!--Comment Prompt-->
             <form method='POST' action="{% url 'comment' post_id=element.post.id %}">
@@ -64,13 +77,21 @@
             <!--All comments-->
             <div>
                 {% for comment in element.comments %}
-                    <div class='container'>
-                        <div class='col mt-3'>
-                            <div class='row rounded-5 pt-3' style="background-color: #EEEEEE; word-wrap: break-word;">
-                                <p><b>@{{ comment.account.username }}</b> - {{ comment.comment }}</p>
+                    <div class='container ps-0'>
+                        <div class='row mt-3'>
+                            <div class='col-auto mt-3'>
+                                <img src="{{ comment.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="35" height="35">
                             </div>
-                            <div class='row mx-3'>
-                                {{ comment.commented_at|date:"d F H:i" }}
+                            <div class='col ps-2'>
+                                <div class='row'>
+                                    <div class='col-auto rounded-4 p-2' style="background-color: #EEEEEE; word-wrap: break-word;">
+                                        <p class='m-0 p-0'><b>{{ comment.account.first_name }} {{ comment.account.last_name }}</b>
+                                            <br>{{ comment.comment }}</p>
+                                    </div>
+                                </div>
+                                <div class='row ps-2'>
+                                    {{ comment.commented_at|date:"d F H:i" }}
+                                </div>
                             </div>
                         </div>
                     </div>
