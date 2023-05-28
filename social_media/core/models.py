@@ -26,7 +26,7 @@ class Post(models.Model):
     text = models.TextField()
     likeCount = models.IntegerField(default = 0)
     commentCount = models.IntegerField(default = 0)
-    # photo = models.ImageField()
+    photo = models.ImageField(upload_to='post_pics/', null=True, blank=True)
 
     posted_at = models.DateTimeField(auto_now_add=True)
 

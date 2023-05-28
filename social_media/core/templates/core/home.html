@@ -6,12 +6,15 @@
 
     <!--Post Prompt-->
     <div class='container'>
-        <form method="POST" action="{% url 'post' %}">
+        <form method="POST" action="{% url 'post' %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3">
                 <textarea class="form-control" name="post-text" rows="4" placeholder="Want to share something?" style="resize: none"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary rounded-pill w-100">Post</button>
+            <div class='row'>
+                <input class='col btn' type='file' name='post-media' placeholder='Upload Image'>
+                <button type="submit" class="btn btn-primary col rounded-pill w-100">Post</button>
+            </div>
         </form>
     </div>
     <br>
@@ -34,6 +37,9 @@
                 <div>
                     <p style="word-wrap: break-word;">{{ element.post.text|linebreaksbr }}</p>
                 </div>
+                {% if element.post.photo %}
+                    <img class='w-100 border-0 rounded-4' src='{{ element.post.photo.url }}'>
+                {% endif %}
             </div>
 
             <hr class='mb-0'>
