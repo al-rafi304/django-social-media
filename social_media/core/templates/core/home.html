@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div>
-                    {{ element.post.text|linebreaksbr }}
+                    <p style="word-wrap: break-word;">{{ element.post.text|linebreaksbr }}</p>
                 </div>
             </div>
 
@@ -82,10 +82,10 @@
                             <div class='col-auto mt-3'>
                                 <img src="{{ comment.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="35" height="35">
                             </div>
-                            <div class='col ps-2'>
+                            <div class='col ps-2' style='max-width: 450px'>
                                 <div class='row'>
                                     <div class='col-auto rounded-4 p-2' style="background-color: #EEEEEE; word-wrap: break-word;">
-                                        <p class='m-0 p-0'><b>{{ comment.account.first_name }} {{ comment.account.last_name }}</b>
+                                        <p class='m-0 p-0' style="word-wrap: break-word;"><b>{{ comment.account.first_name }} {{ comment.account.last_name }}</b>
                                             <br>{{ comment.comment }}</p>
                                     </div>
                                 </div>
