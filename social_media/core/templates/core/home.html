@@ -5,18 +5,42 @@
 <div class='container'>
 
     <!--Post Prompt-->
-    <div class='container'>
+    <div class='container border rounded-4 bg-light p-3 shadow-sm'>
         <form method="POST" action="{% url 'post' %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3">
-                <textarea class="form-control" name="post-text" rows="4" placeholder="Want to share something?" style="resize: none"></textarea>
+                <textarea class="form-control" name="post-text" rows="2" placeholder="Want to share something?" style="resize: none"></textarea>
             </div>
             <div class='row'>
-                <input class='col btn' type='file' name='post-media' placeholder='Upload Image'>
+                <label for="post-photo" class="col-auto">
+                    <a class='btn btn-light border-0 rounded-3'>
+                        <i class="bi bi-image"></i>
+                        <input class='visually-hidden' id="post-photo" type='file' name='post-photo' accept='image/*' onchange="updateFileName(this, 'photo')">
+                    </a>
+                    <span id="photo-file-name"></span>
+                </label>
+                <label for="post-video" class="col">
+                    <a class='btn btn-light border-0 rounded-3'>
+                        <i class="bi bi-film"></i>
+                        <input class='visually-hidden' id="post-video" type='file' name='post-video' accept="video/*" onchange="updateFileName(this, 'video')">
+                    </a>
+                    <span id="video-file-name"></span>
+                </label>
+
                 <button type="submit" class="btn btn-primary col rounded-pill w-100">Post</button>
             </div>
         </form>
     </div>
+
+    <!--Javascript for showing the filename after select the photo/video for posting-->
+    <script>
+        function updateFileName(input, fileType) {
+            var fileName = input.files[0].name;
+            var fileNameElement = document.getElementById(fileType + "-file-name");
+            fileNameElement.textContent = fileName;
+        }
+    </script>
+
     <br>
 
     {% for element in post_element %}
@@ -39,6 +63,12 @@
                 </div>
                 {% if element.post.photo %}
                     <img class='w-100 border-0 rounded-4' src='{{ element.post.photo.url }}'>
+                {% endif %}
+                {% if element.post.video %}
+                    <video class='w-100 h-100 broder-0 rounded-4' controls>
+                        <source src="{{ element.post.video.url }}" type="{{ element.post.video.content_type }}">
+                        Your browser does not support the video tag.
+                    </video>
                 {% endif %}
             </div>
 

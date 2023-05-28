@@ -26,12 +26,13 @@ def home(request):
 def post(request):
         if request.method == 'POST':
             post_text = request.POST['post-text']
-            post_media = request.FILES.get('post-media')
-
+            post_photo = request.FILES.get('post-photo')
+            post_video = request.FILES.get('post-video')
             post = Post()
             post.text = post_text
             post.account = request.user
-            post.photo = post_media
+            post.photo = post_photo
+            post.video = post_video
             post.save()
             messages.success(request, 'Your post has been submitted!')
 
