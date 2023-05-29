@@ -6,4 +6,5 @@ urlpatterns = [
     path('post', views.post, name='post'),
     path('<int:post_id>/comment', views.comment, name='comment'),
     path('<int:post_id>/like', views.like, name='like'),
+    path('<int:comment_id>/comment-like', views.commentLike, name='comment-like'),
 ]

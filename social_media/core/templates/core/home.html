@@ -130,27 +130,31 @@
 
             <!--All comments-->
             <div>
-                {% for comment in element.comments %}
+                {% for comment_element in element.comment_element %}
                     <div class='container ps-0 '>
                         <div class='row mt-1'>
                             <div class='col-auto mt-2'>
-                                <img src="{{ comment.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="35" height="35">
+                                <img src="{{ comment_element.comment.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="35" height="35">
                             </div>
                             <div class='col ps-2' style='max-width: 450px;'>
                                 <div class='row'>
                                     <div class='col-auto rounded-4 p-2 bg-light-secondary' style="font-size: 15px; word-wrap: break-word;">
-                                        <p class='m-0 p-0 ps-1' style="word-wrap: break-word; line-height: 1.2"><b>{{ comment.account.first_name }} {{ comment.account.last_name }}</b> 
-                                            <span class='text-secondary'>@{{ comment.account.username }}</span>
-                                            <br>{{ comment.comment }}
+                                        <p class='m-0 p-0 ps-1' style="word-wrap: break-word; line-height: 1.2"><b>{{ comment_element.comment.account.first_name }} {{ comment_element.comment.account.last_name }}</b> 
+                                            <span class='text-secondary'>@{{ comment_element.comment.account.username }}</span>
+                                            <br>{{ comment_element.comment.comment }}
                                         </p>
                                     </div>
                                 </div>
                                 <div class='row ps-2 ' style='font-size: 14px'>
-                                    <a type='button' href="" class='col-auto btn btn-light btn-sm border-0 rounded-3'>
-                                        <i class="bi bi-heart"></i>
-                                        <span>3</span>
+                                    <a type='button' href="{% url 'comment-like' comment_id=comment_element.comment.id %}" class='col-auto btn btn-light btn-sm border-0 rounded-3'>
+                                        {% if comment_element.liked %}
+                                            <i class="bi bi-heart-fill"></i>
+                                        {% else %}
+                                            <i class="bi bi-heart"></i>
+                                        {% endif %}
+                                        <span>{{ comment_element.comment.likeCount }}</span>
                                     </a>
-                                    <span class='col text-secondary mt-1 ps-0 p-0'>· {{ comment.commented_at|custom_time_format}}</span>
+                                    <span class='col text-secondary mt-1 ps-0 p-0'>· {{ comment_element.comment.commented_at|custom_time_format}}</span>
                                 </div>
                             </div>
                         </div>

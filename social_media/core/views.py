@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from .models import Post, Comment, Follow, Like
+from .models import Post, Comment, Follow, Like, CommentLike
 
 def home(request):
     if not request.user.is_authenticated:
@@ -13,12 +13,22 @@ def home(request):
         for post in posts:
             comments = Comment.objects.filter(post = post).order_by('-commented_at')
             liked = True if Like.objects.filter(post=post, account=request.user).exists() else False
+
+            comment_element = []
+            for comment in comments:
+                temp = {
+                    'comment': comment,
+                    'liked': True if CommentLike.objects.filter(comment=comment, account=request.user).exists() else False
+                }
+                comment_element.append(temp)
+
             temp = {
                 'post': post,
-                'comments': comments if len(comments) > 0 else None,
+                'comment_element': comment_element if len(comment_element) > 0 else None,
                 'liked': liked
             }
             post_element.append(temp)
+
         return render(request, 'core/home.html', {
             'post_element': post_element,
         })
@@ -69,4 +79,20 @@ def like(request, post_id):
         post.likeCount -= 1
     
     post.save()
+    return redirect('home')
+
+def commentLike(request, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    if CommentLike.objects.filter(comment=comment, account=request.user).exists() == False:
+        like = CommentLike()
+        like.comment = comment
+        like.account = request.user
+        like.save()
+        comment.likeCount += 1
+    else:
+        like = CommentLike.objects.get(comment=comment, account=request.user)
+        like.delete()
+        comment.likeCount -= 1
+    
+    comment.save()
     return redirect('home')
