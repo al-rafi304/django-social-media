@@ -86,7 +86,7 @@
             <hr class='mb-0'>
             
             <!--Interaction Buttons-->
-            <div class='row mt-0 m-1'>
+            <div class='row m-1'>
                 <!--Like Button-->
                 <a type='button' href="{% url 'like' post_id=element.post.id %}" class='col btn btn-light border-0 rounded-3'>
                     {% if element.liked %}
@@ -96,7 +96,7 @@
                     {% endif %}
 
                     {% if element.post.likeCount > 0 %}
-                        <span>{{ element.post.likeCount }}</span>
+                        <span>{{ element.post.likeCount|custom_number_format }}</span>
                     {% endif %}
                 </a>
                 
@@ -104,7 +104,7 @@
                 <a type='button' class='col btn btn-light border-0 rounded-3'>
                     <i class="bi bi-chat"></i>
                     {% if element.post.commentCount > 0 %}
-                        <span>{{ element.post.commentCount }}</span>
+                        <span>{{ element.post.commentCount|custom_number_format }}</span>
                     {% endif %}
                 </a>
                 
@@ -152,7 +152,10 @@
                                         {% else %}
                                             <i class="bi bi-heart"></i>
                                         {% endif %}
-                                        <span>{{ comment_element.comment.likeCount }}</span>
+
+                                        {% if comment_element.comment.likeCount > 0 %}
+                                            <span>{{ comment_element.comment.likeCount|custom_number_format }}</span>
+                                        {% endif %}
                                     </a>
                                     <span class='col text-secondary mt-1 ps-0 p-0'>· {{ comment_element.comment.commented_at|custom_time_format}}</span>
                                 </div>

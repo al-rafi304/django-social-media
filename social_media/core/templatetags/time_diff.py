@@ -4,7 +4,7 @@ from django.utils import timezone
 
 register = template.Library()
 
-def get_time_diff(time):
+def time_format(time):
         time_diff = None
         diff = timezone.now() - time
 
@@ -30,4 +30,17 @@ def get_time_diff(time):
 
         return f"{time_diff}"
 
-register.filter('custom_time_format', get_time_diff)
+def number_format(num):
+    new_num = str(num)
+    if num > 999:
+        new_num = str(round((num / 1000), 1)) + 'K'
+    if num > 999999:
+        new_num = str(round((num / 1000000), 1)) + 'M'
+    if num > 999999999:
+        new_num = str(round((num / 1000000000), 1)) + 'B'
+    
+    return new_num
+         
+
+register.filter('custom_time_format', time_format)
+register.filter('custom_number_format', number_format)
