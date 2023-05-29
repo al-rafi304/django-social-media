@@ -9,18 +9,18 @@
         <form method="POST" action="{% url 'post' %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3">
-                <textarea class="form-control border rounded-4" name="post-text" rows="2" placeholder="Want to share something?" style="resize: none"></textarea>
+                <textarea class="form-control bg-light-secondary border-0 rounded-4" name="post-text" rows="2" placeholder="Want to share something?" style="resize: none;"></textarea>
             </div>
             <div class='row'>
                 <label for="post-photo" class="col-auto">
-                    <a class='btn btn-light border-0 rounded-3'>
+                    <a class='btn btn-light-secondary border-0 rounded-3'>
                         <i class="bi bi-image"></i>
                         <input class='visually-hidden' id="post-photo" type='file' name='post-photo' accept='image/*' onchange="updateFileName(this, 'photo')">
                     </a>
                     <span id="photo-file-name"></span>
                 </label>
                 <label for="post-video" class="col">
-                    <a class='btn btn-light border-0 rounded-3'>
+                    <a class='btn btn-light-secondary border-0 rounded-3'>
                         <i class="bi bi-film"></i>
                         <input class='visually-hidden' id="post-video" type='file' name='post-video' accept="video/*" onchange="updateFileName(this, 'video')">
                     </a>
@@ -43,9 +43,13 @@
 
     {% for element in post_element %}
             
-        <!--Post-->
+        <!--Post Container-->
         <div class='container border rounded-4 bg-light p-3 pb-2 mb-3 shadow-sm'>
+
+            <!--Post-->
             <div>
+
+                <!--Heading-->
                 <div class='row mb-2'>
                     <div class='col-auto'>
                         <img src="{{ element.post.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="40" height="40">
@@ -59,42 +63,53 @@
                         <span class='text-secondary'>@{{ element.post.account.username }}</span>
                     </div>
                 </div>
-                <div>
+
+                <!--Post Paragraph-->
+                <div class='mb-0 pb-0'>
                     <p style="word-wrap: break-word;">{{ element.post.text|linebreaksbr }}</p>
                 </div>
-                {% if element.post.photo %}
+                
+                <!--Post Media-->
+                <div>
+                    {% if element.post.photo %}
                     <img class='w-100 border-0 rounded-4' src='{{ element.post.photo.url }}'>
-                {% endif %}
-                {% if element.post.video %}
+                    {% endif %}
+                    {% if element.post.video %}
                     <video class='w-100 h-100 broder-0 rounded-4' controls>
                         <source src="{{ element.post.video.url }}" type="{{ element.post.video.content_type }}">
                         Your browser does not support the video tag.
                     </video>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
 
             <hr class='mb-0'>
             
             <!--Interaction Buttons-->
-            <div class='row mt-0'>
+            <div class='row mt-0 m-1'>
                 <!--Like Button-->
-                <a type='button' href="{% url 'like' post_id=element.post.id %}" class='col btn btn-light m-1 py-1 border-0 rounded-3'>
+                <a type='button' href="{% url 'like' post_id=element.post.id %}" class='col btn btn-light border-0 rounded-3'>
                     {% if element.liked %}
-                    <i class="bi bi-heart-fill"></i>
+                        <i class="bi bi-heart-fill"></i>
                     {% else %}
-                    <i class="bi bi-heart"></i>
+                        <i class="bi bi-heart"></i>
                     {% endif %}
-                    <span>{{ element.post.likeCount }}</span>
+
+                    {% if element.post.likeCount > 0 %}
+                        <span>{{ element.post.likeCount }}</span>
+                    {% endif %}
                 </a>
                 
                 <!--Comment Button-->
-                <a type='button' class='col btn btn-light m-1 py-1 border-0 rounded-3'>
+                <a type='button' class='col btn btn-light border-0 rounded-3'>
                     <i class="bi bi-chat"></i>
-                    <span>{{ element.post.commentCount }}</span>
+                    {% if element.post.commentCount > 0 %}
+                        <span>{{ element.post.commentCount }}</span>
+                    {% endif %}
                 </a>
                 
                 <!--Share Button-->
-                <a type='button' class='col btn btn-light m-1 py-1 border-0 rounded-3'>
+                <a type='button' class='col btn btn-light border-0 rounded-3'>
                     <i class="bi bi-share"></i>
                 </a>
             </div>
@@ -105,9 +120,11 @@
             <form method='POST' action="{% url 'comment' post_id=element.post.id %}">
                 {% csrf_token %}
                 <div class="input-group mb-3">
-                    <input type="text" name="comment-text" class="form-control rounded-pill" placeholder="Enter Comment..." aria-describedby="button-addon2">
+                    <input type="text" name="comment-text" class="form-control rounded-pill border-0" placeholder="Enter Comment..." aria-describedby="button-addon2" style="background-color: #F0F2F5">
                     <div class='p-1'></div>
-                    <button class="btn btn-outline-secondary rounded-pill" type="submit" id="button-addon2">Comment</button>
+                    <button class="btn btn-outline-secondary border-0 rounded-pill" type="submit" id="button-addon2">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
                 </div>
             </form>
 
@@ -116,12 +133,12 @@
                 {% for comment in element.comments %}
                     <div class='container ps-0 '>
                         <div class='row mt-1'>
-                            <div class='col-auto mt-3'>
+                            <div class='col-auto mt-2'>
                                 <img src="{{ comment.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="35" height="35">
                             </div>
                             <div class='col ps-2' style='max-width: 450px;'>
                                 <div class='row'>
-                                    <div class='col-auto rounded-4 p-2' style="font-size: 15px; background-color: #EEEEEE; word-wrap: break-word;">
+                                    <div class='col-auto rounded-4 p-2 bg-light-secondary' style="font-size: 15px; word-wrap: break-word;">
                                         <p class='m-0 p-0 ps-1' style="word-wrap: break-word; line-height: 1.2"><b>{{ comment.account.first_name }} {{ comment.account.last_name }}</b> 
                                             <span class='text-secondary'>@{{ comment.account.username }}</span>
                                             <br>{{ comment.comment }}

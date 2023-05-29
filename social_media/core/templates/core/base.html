@@ -11,23 +11,42 @@
             a{
                 text-decoration: none;
             }
+
+            .bg-light{
+                background-color: #FFFFFF !important;
+            }
+            .bg-light-secondary{
+                background-color: #F0F2F5;
+            }
+
+            .btn-light{
+                background-color: #FFFFFF !important;
+            }
+            .btn-light-secondary{
+                background-color: #F0F2F5;
+            }
+
+            a.btn-light:hover{
+                background-color: #F0F2F5 !important;
+            }
+
         </style>
     </head>
-    <body style='background-color: #EEEEEE'>
+    <body style='background-color: #F0F2F5'>
 
     <!-- Navbar -->
     {% if request.user.is_authenticated %}
-        <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: #222831;">
+        <nav class="navbar navbar-expand-lg sticky-top shadow-sm border" style="background-color: #ffffff;">
             <div class="container">
-                <a class="navbar-brand" href="{% url 'home' %}">UnSocial</a>
+                <a class="navbar-brand text-dark" href="{% url 'home' %}">UnSocial</a>
                 
                 <!-- Search Bar -->
                 <ul class="navbar-nav w-100 justify-content-center">
                     <li class="nav-item">
                         {% comment %} <form class="d-flex" role="search" method='GET' action="{% url 'all_products' %}"> {% endcomment %}
-                        <form class="d-flex" role="search" method='GET'>
-                            <input class="form-control me-2 border-0 rounded-pill" type="search" name='search' placeholder="Search" aria-label="Search" style="width: 500px">
-                            <button class="btn btn-outline-light" type="submit">Search</button>
+                        <form class="d-flex ps-5 ms-4" role="search" method='GET'>
+                            <input class="form-control me-2 border-0 rounded-pill" type="search" name='search' placeholder="Search" aria-label="Search" style="width: 500px; background-color: #F0F2F5">
+                            <button class="btn btn-outline-light visually-hidden" type="submit">Search</button>
                         </form>
                     </li>
                 </ul>
@@ -43,12 +62,13 @@
                     <ul class="navbar-nav ms-auto">
 
                         <!-- User Profile Icon -->
-                        <li class="nav-item">
-                            <div class="dropdown">
+                        <li class="nav-item border-0 rounded-4 bg-light-secondary">
+                            <div class="dropdown border-1 rounded-4">
                                 <button class="btn btn-link dropdown-toggle rounded-circle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color:inherit;"  >
                                     <img src="{{ request.user.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="30" height="30">
+                                    <span class='text-dark fw-semibold'>{{ request.user.first_name }}</span>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu border-0 shadow-sm">
                                     <li><a class="dropdown-item" href="">Update Profile</a></li>
                                     <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal" href="#">Logout</a></li>
                                 </ul>
