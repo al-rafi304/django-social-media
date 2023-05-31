@@ -46,6 +46,7 @@ def profilePage(request, account_id):
     return render(request, 'core/profile.html', {
         'account': Account.objects.get(id=account_id),
         'post_element': post_element,
+        'following_info': Follow.objects.filter(follower=request.user, account = Account.objects.get(id=account_id))
     })
 
 def post(request):
@@ -139,3 +140,31 @@ def commentLike(request, comment_id):
     comment.save()
     return redirect('home')
 
+
+def followButton(request):
+    if request.method == "POST":
+        following = Account.objects.get(id=request.POST['account-id'])
+        user = Account.objects.get(id=request.user.id)
+
+        # Unfollow
+        if Follow.objects.filter(follower=request.user, account=following).exists():
+            followObj = Follow.objects.get(follower=request.user, account=following)
+            followObj.delete()
+
+            user.followingCount -= 1
+            following.followerCount -= 1
+
+        # Follow
+        else:
+            followObj = Follow()
+            followObj.follower = request.user
+            followObj.account = following
+            followObj.save()
+
+            user.followingCount += 1
+            following.followerCount += 1
+
+        user.save()
+        following.save()
+
+    return redirect('profile', account_id=request.POST['account-id'])

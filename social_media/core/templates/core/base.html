@@ -73,8 +73,18 @@
                                     <span class='text-dark fw-semibold'>{{ request.user.first_name }}</span>
                                 </button>
                                 <ul class="dropdown-menu border-0 shadow-sm">
-                                    <li><a class="dropdown-item" href="">Update Profile</a></li>
-                                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal" href="#">Logout</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'profile' account_id=request.user.id %}">
+                                        <i class="bi bi-person-fill me-2"></i>
+                                        Profile
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="">
+                                        <i class="bi bi-gear-wide-connected me-2"></i>
+                                        Settings
+                                    </a></li>
+                                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal" href="#">
+                                        <i class="bi bi-power me-2"></i>
+                                        Logout
+                                    </a></li>
                                 </ul>
                             </div>
                         </li>

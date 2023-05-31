@@ -12,9 +12,21 @@
         <div class='p-3'>
             <!--Follow Button-->
             <div class='d-flex flex-row-reverse'>
-                <a href="" class='btn btn-primary rounded-pill border border-0'>
-                    <span class='fw-bold'>Follow</span>
-                </a>
+                {% if account.id == request.user.id %}
+                    <a class='btn btn-secondary rounded-pill border border-0'>Edit Profile</a>
+                {% else %}
+                    <form method='POST' action="{% url 'follow-button' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="account-id" value="{{ account.id }}">
+                        <button type='submit' class='btn btn-primary rounded-pill border border-0'>
+                            {% if following_info %}
+                                <span class='fw-bold'>Unfollow</span>
+                            {% else %}
+                                <span class='fw-bold'>Follow</span>
+                            {% endif %}
+                        </button>
+                    </form>
+                {% endif %}
             </div>
             <div class='col pt-0 ms-3'>
                 <!--Name-->
@@ -58,7 +70,7 @@
                     </span>
                 </div >
                 <!--Follower-->
-                <div class='row gap-3'>
+                <div class='row gap-3 mb-2'>
                     <span class='col-auto p-0'>
                         <span class='fw-bold'>{{ account.followerCount|custom_number_format }}</span>
                         <span class='text-secondary fw-medium'>Followers</span>
@@ -72,6 +84,12 @@
                         <span class='text-secondary fw-medium'>Posts</span>
                     </span>
                 </div>
+
+                {% if following_info %}
+                <div class='row'>
+                    <span class='p-0 text-secondary' style='font-size: 13px'>Following since {{ following_info.0.followed_at|custom_time_format }}</span>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
