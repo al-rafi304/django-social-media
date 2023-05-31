@@ -48,6 +48,33 @@ def post(request):
 
         return redirect('home')
 
+def sharePost(request, post_id):
+    if request.method == 'POST':
+        post = Post.objects.get(id=post_id)
+        
+        new_post = Post()
+        new_post.account = request.user
+        new_post.text = request.POST['share-text']
+        
+        # If 'post' is an original post
+        if post.shared_post == None:
+            new_post.shared_post = post
+
+        # If 'post' is already sharing a post
+        else:
+            original_post = Post.objects.get(id=post.shared_post.id)
+            new_post.shared_post = original_post
+            original_post.shareCount += 1
+            original_post.save()
+        
+        post.shareCount += 1
+
+        post.save()
+        new_post.save()
+        messages.success(request, 'You have shared a post')
+
+    return redirect('home')
+
 def comment(request, post_id):
     if request.method == "POST":
         post = Post.objects.get(id=post_id)
