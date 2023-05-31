@@ -78,6 +78,26 @@
 
     {% for element in post_element %}
     <div>
+        <!--Share Post Prompt-->
+        <div class='sharePrompt'>
+            <div class='container border rounded-4 bg-light p-3 pb-2 shadow-sm' >
+                <form method="POST" action="{% url 'share-post' post_id=element.post.id %}">
+                    {% csrf_token %}
+                    <div class='row'>
+                        <h6 class='col'>Share @{{ element.post.account.username }}'s post</h6>
+                    </div>
+                    <textarea class="form-control bg-light-secondary border-0 rounded-4 mb-2" name="share-text" rows="1" placeholder="Want to share something?" style="resize: none;"></textarea>
+                    <div class='d-flex flex-row-reverse'>
+                        <button type='submit' class='btn btn-sm mx-1 btn-primary rounded-pill'>Share</button>
+                        <a class='btn btn-sm mx-1 btn-secondary rounded-pill cancel-share'>Cancel</a>
+                    </div>
+                </form>
+            </div>
+
+            <div class='d-flex justify-content-center'>
+                <div class='vr m-2' style='height: 20px'></div>
+            </div>
+        </div>
         <!--Post Container-->
         <div class='container border rounded-4 bg-light p-3 pb-2 mb-3 shadow-sm postContainer'>
 
@@ -264,7 +284,7 @@
         // Unhide and scroll to the sharePrompt when share button is clicked
         $('.shareBtn').click(function() {
             var sharePrompt = $(this).parents('.postContainer').siblings('.sharePrompt');
-
+            console.log(sharePrompt)
             sharePrompt.fadeIn(500);
             
             // Scroll to the sharePrompt div
