@@ -2,58 +2,82 @@
 {% load time_diff %}
 {% block content %}
 
-<div class='container'>
-
-    <!--Post Prompt-->
-    <div class='container border rounded-4 bg-light p-3 mb-3 shadow-sm'>
-        <form method="POST" action="{% url 'post' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="mb-3">
-                <textarea class="form-control bg-light-secondary border-0 rounded-4" name="post-text" rows="2" placeholder="Want to share something?" style="resize: none;"></textarea>
+<div>
+    <div class='container border rounded-4 bg-light p-0 mb-3 shadow-sm' >
+        <!--Profile & Cover-->
+        <div class='position-relative'>
+            <img src="{{ account.cover_img.url }}" class='object-fit-cover rounded-top-4 w-100 p-0 m-0' height='200px'>
+            <img src="{{ account.profile_img.url }}" class='object-fit-cover border border-3 border-light rounded-circle position-absolute mt-4 ms-3 top-50 start-0' height='120' width='120'>
+        </div>
+        <div class='p-3'>
+            <!--Follow Button-->
+            <div class='d-flex flex-row-reverse'>
+                <a href="" class='btn btn-primary rounded-pill border border-0'>
+                    <span class='fw-bold'>Follow</span>
+                </a>
             </div>
-            <div class='row'>
-                <label for="post-photo" class="col-auto">
-                    <a class='btn btn-light-secondary border-0 rounded-3'>
-                        <i class="bi bi-image"></i>
-                        <input class='visually-hidden' id="post-photo" type='file' name='post-photo' accept='image/*' onchange="updateFileName(this, 'photo')">
-                    </a>
-                    <span id="photo-file-name" style='word-wrap: break-word;'></span>
-                </label>
-                <label for="post-video" class="col">
-                    <a class='btn btn-light-secondary border-0 rounded-3'>
-                        <i class="bi bi-film"></i>
-                        <input class='visually-hidden' id="post-video" type='file' name='post-video' accept="video/*" onchange="updateFileName(this, 'video')">
-                    </a>
-                    <span id="video-file-name" style='word-wrap: break-word;'></span>
-                </label>
-
-                <button type="submit" class="btn btn-primary col rounded-pill w-100">Post</button>
+            <div class='col pt-0 ms-3'>
+                <!--Name-->
+                <div class='row mb-2'>
+                    <span class='row h5 mb-0 pb-0 fw-bold'>{{ account.first_name }} {{ account.last_name }}</span>
+                    <span class='row text-secondary fs-6'>@{{ account.username }}</span>
+                </div>
+                <!--Bio-->
+                <span class='row mb-2'>{{ account.bio }}</span>
+                <!--About-->
+                <div class='row text-secondary fw-medium gap-3 mb-2'>
+                    {% if account.occupation %}
+                        <span class='col-auto p-0'>
+                            <i class="bi bi-briefcase-fill"></i>
+                            {{ account.occupation }}
+                        </span>
+                    {% endif %}
+                    {% if account.relationshipStatus %}
+                        <span class='col-auto p-0'>
+                            <i class="bi bi-person-heart"></i>
+                            {% if account.relationshipStatus == account.SINGLE %}
+                                Single
+                            {% elif account.relationshipStatus == account.MINGLE %}
+                                Mingle
+                            {% elif account.relationshipStatus == account.MARRIED %}
+                                Married
+                            {% elif account.relationshipStatus == account.COMPLICATED %}
+                                Complicated
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                    {% if account.address %}
+                        <span class='col-auto p-0'>
+                            <i class="bi bi-geo-alt-fill"></i>
+                            {{ account.address }}
+                        </span>
+                    {% endif %}
+                    <span class='col-auto p-0'>
+                        <i class="bi bi-calendar-week"></i>
+                        Joined {{ account.date_joined|date:"F Y" }}
+                    </span>
+                </div >
+                <!--Follower-->
+                <div class='row gap-3'>
+                    <span class='col-auto p-0'>
+                        <span class='fw-bold'>{{ account.followerCount|custom_number_format }}</span>
+                        <span class='text-secondary fw-medium'>Followers</span>
+                    </span>
+                    <span class='col-auto p-0'>
+                        <span class='fw-bold'>{{ account.followingCount|custom_number_format }}</span>
+                        <span class='text-secondary fw-medium'>Following</span>
+                    </span>
+                    <span class='col p-0'>
+                        <span class='fw-bold'>{{ post_element|length }}</span>
+                        <span class='text-secondary fw-medium'>Posts</span>
+                    </span>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 
     {% for element in post_element %}
     <div>
-        <!--Share Post Prompt-->
-        <div class='sharePrompt'>
-            <div class='container border rounded-4 bg-light p-3 pb-2 shadow-sm' >
-                <form method="POST" action="{% url 'share-post' post_id=element.post.id %}">
-                    {% csrf_token %}
-                    <div class='row'>
-                        <h6 class='col'>Share @{{ element.post.account.username }}'s post</h6>
-                    </div>
-                    <textarea class="form-control bg-light-secondary border-0 rounded-4 mb-2" name="share-text" rows="1" placeholder="Want to share something?" style="resize: none;"></textarea>
-                    <div class='d-flex flex-row-reverse'>
-                        <button type='submit' class='btn btn-sm mx-1 btn-primary rounded-pill'>Share</button>
-                        <a class='btn btn-sm mx-1 btn-secondary rounded-pill cancel-share'>Cancel</a>
-                    </div>
-                </form>
-            </div>
-
-            <div class='d-flex justify-content-center'>
-                <div class='vr m-2' style='height: 20px'></div>
-            </div>
-        </div>
         <!--Post Container-->
         <div class='container border rounded-4 bg-light p-3 pb-2 mb-3 shadow-sm postContainer'>
 
@@ -257,13 +281,4 @@
     });
 </script>
 
-<!--Javascript for showing the filename after select the photo/video for posting-->
-<script>
-    function updateFileName(input, fileType) {
-        var fileName = input.files[0].name;
-        var fileNameElement = document.getElementById(fileType + "-file-name");
-        fileNameElement.textContent = fileName;
-    }
-</script>
 {% endblock content %}
-

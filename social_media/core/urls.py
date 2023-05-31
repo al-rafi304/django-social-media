@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.home, name ='home'),
+    path('', views.homePage, name ='home'),
+    path('profile/<int:account_id>', views.profilePage, name='profile'),
     path('post', views.post, name='post'),
     path('<int:post_id>/sharePost', views.sharePost, name='share-post'),
     path('<int:post_id>/comment', views.comment, name='comment'),

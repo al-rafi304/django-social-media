@@ -1,37 +1,52 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from .models import Post, Comment, Follow, Like, CommentLike
+from .models import Post, Comment, Follow, Like, CommentLike, Account
 
-def home(request):
+def getPostElement(request, account_id=None):
+    posts = Post.objects.all().order_by('-posted_at') if account_id == None else Post.objects.filter(account=Account.objects.get(id=account_id)).order_by('-posted_at')
+    post_element = []
+
+    for post in posts:
+        comments = Comment.objects.filter(post = post).order_by('-commented_at')
+        liked = True if Like.objects.filter(post=post, account=request.user).exists() else False
+
+        comment_element = []
+        for comment in comments:
+            temp = {
+                'comment': comment,
+                'liked': True if CommentLike.objects.filter(comment=comment, account=request.user).exists() else False
+            }
+            comment_element.append(temp)
+
+        temp = {
+            'post': post,
+            'comment_element': comment_element if len(comment_element) > 0 else None,
+            'liked': liked
+        }
+        post_element.append(temp)
+
+    return post_element
+
+def homePage(request):
     if not request.user.is_authenticated:
         return redirect('login')
     else:
-        posts = Post.objects.all().order_by('-posted_at')
-        post_element = []
-
-        for post in posts:
-            comments = Comment.objects.filter(post = post).order_by('-commented_at')
-            liked = True if Like.objects.filter(post=post, account=request.user).exists() else False
-
-            comment_element = []
-            for comment in comments:
-                temp = {
-                    'comment': comment,
-                    'liked': True if CommentLike.objects.filter(comment=comment, account=request.user).exists() else False
-                }
-                comment_element.append(temp)
-
-            temp = {
-                'post': post,
-                'comment_element': comment_element if len(comment_element) > 0 else None,
-                'liked': liked
-            }
-            post_element.append(temp)
+        post_element = getPostElement(request)
 
         return render(request, 'core/home.html', {
             'post_element': post_element,
         })
+
+def profilePage(request, account_id):
+
+    post_element = getPostElement(request, account_id=account_id)
+    # print(post_element)
+
+    return render(request, 'core/profile.html', {
+        'account': Account.objects.get(id=account_id),
+        'post_element': post_element,
+    })
 
 def post(request):
         if request.method == 'POST':
@@ -123,3 +138,4 @@ def commentLike(request, comment_id):
     
     comment.save()
     return redirect('home')
+
