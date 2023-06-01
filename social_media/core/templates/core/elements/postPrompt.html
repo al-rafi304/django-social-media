@@ -1,0 +1,26 @@
+<div class='container border rounded-4 bg-light p-3 mb-3 shadow-sm'>
+    <form method="POST" action="{% url 'post' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <textarea class="form-control bg-light-secondary border-0 rounded-4" name="post-text" rows="2" placeholder="Want to share something?" style="resize: none;"></textarea>
+        </div>
+        <div class='row'>
+            <label for="post-photo" class="col-auto">
+                <a class='btn btn-light-secondary border-0 rounded-3'>
+                    <i class="bi bi-image"></i>
+                    <input class='visually-hidden' id="post-photo" type='file' name='post-photo' accept='image/*' onchange="updateFileName(this, 'photo')">
+                </a>
+                <span id="photo-file-name" style='word-wrap: break-word;'></span>
+            </label>
+            <label for="post-video" class="col">
+                <a class='btn btn-light-secondary border-0 rounded-3'>
+                    <i class="bi bi-film"></i>
+                    <input class='visually-hidden' id="post-video" type='file' name='post-video' accept="video/*" onchange="updateFileName(this, 'video')">
+                </a>
+                <span id="video-file-name" style='word-wrap: break-word;'></span>
+            </label>
+
+            <button type="submit" class="btn btn-primary col rounded-pill w-100">Post</button>
+        </div>
+    </form>
+</div>

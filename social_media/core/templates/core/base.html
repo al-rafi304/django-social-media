@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
     <head>
@@ -137,5 +138,38 @@
         {% endblock content %}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script>
+        // Javascript for hiding/unhiding share prompt box
+        $(document).ready(function() {
+
+            // Hide the sharePrompt initially
+            $('.sharePrompt').hide();
+            
+            // Unhide and scroll to the sharePrompt when share button is clicked
+            $('.shareBtn').click(function() {
+                var sharePrompt = $(this).parents('.postContainer').siblings('.sharePrompt');
+
+                sharePrompt.fadeIn(500);
+                
+                // Scroll to the sharePrompt div
+                var scrollPos = sharePrompt.offset().top - $(window).height() / 2
+                $('html, body').animate({
+                    scrollTop: scrollPos
+                }, 'fast');
+            });
+
+            // Hide the sharePrompt when cancel button is clicked
+            $('.cancel-share').click(function() {
+                $(this).closest('.sharePrompt').fadeOut('fast')
+            });
+        });
+
+        // Javascript for showing the filename after select the photo/video for posting
+        function updateFileName(input, fileType) {
+            var fileName = input.files[0].name;
+            var fileNameElement = document.getElementById(fileType + "-file-name");
+            fileNameElement.textContent = fileName;
+        }
+    </script>
   </body>
 </html>
