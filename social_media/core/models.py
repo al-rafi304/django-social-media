@@ -20,6 +20,9 @@ class Follow(models.Model):
 
     followed_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self) -> str:
+        return f"{self.follower} follows {self.account}"
+
 class Post(models.Model):
     account = models.ForeignKey(Account, on_delete = models.CASCADE)
     
@@ -31,7 +34,16 @@ class Post(models.Model):
     photo = models.ImageField(upload_to='post_pics/', null=True, blank=True)
     video = models.FileField(upload_to='post_videos/', null=True, blank=True)
     shared_post = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)       # Recursive relation
+    
+    EVERYONE = 'EV'
+    FOLLOWERS = 'FL'
 
+    PRIVACY_CHOICES = (
+        (EVERYONE, 'Everyone'),
+        (FOLLOWERS, 'Followers')
+    )
+
+    privacy = models.CharField(max_length = 2, choices = PRIVACY_CHOICES, default = EVERYONE)
     posted_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

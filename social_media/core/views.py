@@ -1,10 +1,22 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db.models import Q
 
 from .models import Post, Comment, Follow, Like, CommentLike, Account
 
 def getPostElement(request, account_id=None):
-    posts = Post.objects.all().order_by('-posted_at') if account_id == None else Post.objects.filter(account=Account.objects.get(id=account_id)).order_by('-posted_at')
+    following = Follow.objects.filter(follower = request.user).values('account').values_list('account', flat=True)
+    if account_id == None:
+        posts = Post.objects.filter(
+            # Public Posts | Following only post and user is following
+            Q(privacy=Post.EVERYONE) | (Q(privacy=Post.FOLLOWERS) & Q(account__in = following))
+            ).order_by('-posted_at')
+    else:
+        posts = Post.objects.filter(
+            # All Posts of account_id & (Public Posts | Following only post and user is following | Posts are of users)
+            Q(account=Account.objects.get(id=account_id)) & (Q(privacy=Post.EVERYONE) | (Q(privacy=Post.FOLLOWERS) & Q(account__in = following)) | Q(account=request.user))
+            ).order_by('-posted_at')
+
     post_element = []
 
     for post in posts:
@@ -36,6 +48,7 @@ def homePage(request):
 
         return render(request, 'core/home.html', {
             'post_element': post_element,
+            'privacy_options': {'everyone': Post.EVERYONE, 'followers': Post.FOLLOWERS}
         })
 
 def profilePage(request, account_id):
@@ -54,9 +67,11 @@ def post(request):
             post_text = request.POST['post-text']
             post_photo = request.FILES.get('post-photo')
             post_video = request.FILES.get('post-video')
+            post_privacy = request.POST['post-privacy']
             post = Post()
             post.text = post_text
             post.account = request.user
+            post.privacy = post_privacy
             post.photo = post_photo
             post.video = post_video
             post.save()
