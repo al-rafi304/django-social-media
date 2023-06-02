@@ -10,8 +10,8 @@ def getPostElement(request, account_id=None):
     following = Follow.objects.filter(follower = request.user).values('account').values_list('account', flat=True)
     if account_id == None:
         posts = Post.objects.filter(
-            # Public Posts | Following only post and user is following
-            Q(privacy=Post.EVERYONE) | (Q(privacy=Post.FOLLOWERS) & Q(account__in = following))
+            # Public Posts | Following only post and user is following | Post are of users
+            Q(privacy=Post.EVERYONE) | (Q(privacy=Post.FOLLOWERS) & Q(account__in = following)) | Q(account=request.user)
             ).order_by('-posted_at')
     else:
         posts = Post.objects.filter(
