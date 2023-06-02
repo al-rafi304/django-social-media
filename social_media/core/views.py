@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
 
 from .models import Post, Comment, Follow, Like, CommentLike, Account
 
@@ -62,6 +64,7 @@ def profilePage(request, account_id):
         'following_info': Follow.objects.filter(follower=request.user, account = Account.objects.get(id=account_id))
     })
 
+@login_required
 def post(request):
         if request.method == 'POST':
             post_text = request.POST['post-text']
@@ -79,6 +82,7 @@ def post(request):
 
         return redirect('home')
 
+@login_required
 def sharePost(request, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
@@ -106,6 +110,7 @@ def sharePost(request, post_id):
 
     return redirect('home')
 
+@login_required
 def comment(request, post_id):
     if request.method == "POST":
         post = Post.objects.get(id=post_id)
@@ -122,6 +127,7 @@ def comment(request, post_id):
         post.save()
     return redirect('home')
 
+@login_required
 def like(request, post_id):
     post = Post.objects.get(id=post_id)
     if Like.objects.filter(post=post_id, account=request.user).exists() == False:       # Have to use filter instead of get to use exists()
@@ -139,6 +145,7 @@ def like(request, post_id):
     post.save()
     return redirect('home')
 
+@login_required
 def commentLike(request, comment_id):
     comment = Comment.objects.get(id=comment_id)
     if CommentLike.objects.filter(comment=comment, account=request.user).exists() == False:
@@ -155,7 +162,7 @@ def commentLike(request, comment_id):
     comment.save()
     return redirect('home')
 
-
+@login_required
 def followButton(request):
     if request.method == "POST":
         following = Account.objects.get(id=request.POST['account-id'])

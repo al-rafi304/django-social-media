@@ -13,7 +13,7 @@
             <!--Follow Button-->
             <div class='d-flex flex-row-reverse'>
                 {% if account.id == request.user.id %}
-                    <a class='btn btn-secondary rounded-pill border border-0'>Edit Profile</a>
+                    <a class='btn btn-secondary rounded-pill border border-0' href="{% url 'edit-profile' %}">Edit Profile</a>
                 {% else %}
                     <form method='POST' action="{% url 'follow-button' %}">
                         {% csrf_token %}

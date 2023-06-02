@@ -1,0 +1,93 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<br>
+<div class='container bg-light text-dark rounded-4 shadow-sm p-4'>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'edit-profile' %}">
+        {% csrf_token %}
+
+        <!--Profile Pic-->
+        <div class='mb-3'>
+            <span class='h4'>Change Profile Picture</span>
+            <hr class='mt-1'>
+            <div class='d-flex justify-content-center'>
+                <div>
+                    <label for="post-profile" class="">
+                        <a class="btn btn-light border-0 rounded-circle">
+                            <img id="preview-profile" src="{{ request.user.profile_img.url }}" class="object-fit-cover shadow-sm rounded-circle" height="120" width="120">
+                            <input class="visually-hidden" id="post-profile" type="file" name="post-profile" accept="image/*" onchange="previewImage(this, 'preview-profile', 'profile-file-name')">
+                        </a>
+                        {% comment %} <span id="profile-file-name" style="word-wrap: break-word;"></span> {% endcomment %}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!--Cover Pic-->
+        <div class='mb-3'>
+            <span class='h4'>Change Profile Picture</span>
+            <hr class='mt-1'>
+            <div class='d-flex justify-content-center'>
+                <label for="post-cover" class="">
+                    <a class="btn btn-light border-0 rounded-4">
+                        <img id="preview-cover" src="{{ request.user.cover_img.url }}" class='object-fit-cover rounded-4 w-100' height='200px'>
+                        <input class="visually-hidden" id="post-cover" type="file" name="post-cover" accept="image/*" onchange="previewImage(this, 'preview-cover', 'cover-file-name')">
+                    </a>
+                    {% comment %} <span id="cover-file-name" style="word-wrap: break-word;"></span> {% endcomment %}
+                </label>
+            </div>
+        </div>
+
+        <!--About-->
+        <div class='mb-3'>
+            <span class='h4'>Change About Section</span>
+            <hr class='mt-1'>
+            <div class="form-floating mb-3">
+                <input name='bio' type="text" class="form-control" id="floatingInput" placeholder="Enter Bio" value='{{ request.user.bio }}'>
+                <label for="floatingInput">Bio</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input name='address' type="text" class="form-control" id="floatingInput" placeholder="Enter Address" value='{{ request.user.address }}'>
+                <label for="floatingInput">Address</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input name='occupation' type="text" class="form-control" id="floatingInput" placeholder="Enter Occupation" value='{{ request.user.occupation }}'>
+                <label for="floatingInput">Occupation</label>
+            </div>
+            <div class="form-floating">
+                <select name='relationshipStatus' class="form-select" id="floatingSelect" >
+                    <option value="{{request.user.SINGLE}}" {% if request.user.relationshipStatus == request.user.SINGLE %}selected{% endif %}>Single</option>
+                    <option value="{{request.user.MINGLE}}" {% if request.user.relationshipStatus == request.user.MINGLE %}selected{% endif %}>Mingle</option>
+                    <option value="{{request.user.MARRIED}}" {% if request.user.relationshipStatus == request.user.MARRIED %}selected{% endif %}>Married</option>
+                    <option value="{{request.user.COMPLICATED}}" {% if request.user.relationshipStatus == request.user.COMPLICATED %}selected{% endif %}>Complicated</option>
+                    <option value='None' {% if request.user.relationshipStatus == none %}selected{% endif %}>None</option>
+                </select>
+                <label for="floatingSelect">Relationship Status</label>
+              </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg rounded-pill w-100">Update</button>
+    </form>
+</div>
+
+<script>
+    function previewImage(input, previewImageId, fileNameId) {
+        var file = input.files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function () {
+            var previewImage = document.getElementById(previewImageId);
+            previewImage.src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+            document.getElementById(fileNameId).textContent = file.name;
+        } else {
+            document.getElementById(fileNameId).textContent = "";
+        }
+    }
+</script>
+
+{% endblock content %}
