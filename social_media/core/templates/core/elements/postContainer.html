@@ -13,7 +13,7 @@
             </div>
             <div class='col ps-0' style='line-height: 1.2'>
                 <span>
-                    <a href="{% url 'profile' account_id=element.post.account.id %}"><b>{{ element.post.account.first_name }} {{ element.post.account.last_name }}</b></a>
+                    <a class='name-link' href="{% url 'profile' account_id=element.post.account.id %}"><b>{{ element.post.account.first_name }} {{ element.post.account.last_name }}</b></a>
                     <span class='text-secondary'> · {{ element.post.posted_at|custom_time_format}}</span>
                 </span>
                 <br>
@@ -45,11 +45,13 @@
                 <!--Heading-->
                 <div class='row mb-2'>
                     <div class='col-auto'>
-                        <img src="{{ element.post.shared_post.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="40" height="40">
+                        <a href="{% url 'profile' account_id=element.post.shared_post.account.id %}">
+                            <img src="{{ element.post.shared_post.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="40" height="40">
+                        </a>
                     </div>
                     <div class='col ps-0' style='line-height: 1.2'>
                         <span>
-                            <a href="{% url 'profile' account_id=element.post.shared_post.account.id %}">
+                            <a class='name-link' href="{% url 'profile' account_id=element.post.shared_post.account.id %}">
                                 <b>{{ element.post.shared_post.account.first_name }} {{ element.post.shared_post.account.last_name }}</b>
                             </a>
                             <span class='text-secondary'> · {{ element.post.shared_post.posted_at|custom_time_format}}</span>
@@ -141,7 +143,7 @@
                         <div class='row'>
                             <div class='col-auto rounded-4 p-2 bg-light-secondary' style="font-size: 15px; word-wrap: break-word;">
                                 <p class='m-0 p-0 ps-1' style="word-wrap: break-word; line-height: 1.2">
-                                    <a href="{% url 'profile' account_id=comment_element.comment.account.id %}">
+                                    <a class='name-link' href="{% url 'profile' account_id=comment_element.comment.account.id %}">
                                         <b>{{ comment_element.comment.account.first_name }} {{ comment_element.comment.account.last_name }}</b> 
                                     </a>
                                     <span class='text-secondary'>@{{ comment_element.comment.account.username }}</span>
