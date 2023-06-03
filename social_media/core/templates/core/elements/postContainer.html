@@ -121,9 +121,9 @@
     <form method='POST' action="{% url 'comment' post_id=element.post.id %}">
         {% csrf_token %}
         <div class="input-group mb-3">
-            <input type="text" name="comment-text" class="form-control rounded-pill border-0" placeholder="Enter Comment..." aria-describedby="button-addon2" style="background-color: #F0F2F5">
+            <input type="text" name="comment-text" class="form-control rounded-pill border-0" placeholder="Enter Comment..." aria-describedby="button-addon2" style="background-color: #F0F2F5" onkeyup="checkBlankComment(this)">
             <div class='p-1'></div>
-            <button class="btn btn-outline-secondary border-0 rounded-pill" type="submit" id="button-addon2">
+            <button class="btn btn-outline-secondary border-0 rounded-pill comment-button" type="submit" id="button-addon2" disabled>
                 <i class="bi bi-send-fill"></i>
             </button>
         </div>

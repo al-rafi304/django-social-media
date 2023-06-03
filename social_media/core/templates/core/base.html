@@ -167,11 +167,62 @@
         });
 
         // Javascript for showing the filename after select the photo/video for posting
-        function updateFileName(input, fileType) {
+        function selectFile(input, fileType) {
+
+            // Showing file name after selecting
             var fileName = input.files[0].name;
             var fileNameElement = document.getElementById(fileType + "-file-name");
             fileNameElement.textContent = fileName;
+            
+            // Limiting to select only one file type
+            if (fileType == 'photo'){
+                $('#post-video').parents('label').hide();
+                $('#photo-remove-btn').show()
+            } else if (fileType == 'video'){
+                $('#post-photo').parents('label').hide();
+                $('#video-remove-btn').show()
+            }
+
         }
+
+        function removeFile(button, fileType) {
+            if (fileType == 'photo') {
+                var input = $('#post-photo');
+
+                $('#post-video').parents('label').show();
+
+            } else if (fileType == 'video') {
+                var input = $('#post-video');
+
+                $('#post-photo').parents('label').show();
+            }
+
+            input[0].value = null;
+            var fileNameElement = document.getElementById(fileType + "-file-name");
+            fileNameElement.textContent = null;
+            $(button).hide();
+        }
+
+        function checkBlankPost(input){
+            submitButton = $('#submit-button');
+            console.log(input.value);
+            if (input.value == '') {
+                submitButton.prop("disabled",true);
+            } else {
+                submitButton.prop('disabled', false);
+            }
+        }
+
+        function checkBlankComment(input){
+            submitButton = $(input).siblings('.comment-button');
+            console.log(input.value, submitButton);
+            if (input.value == '') {
+                submitButton.prop("disabled",true);
+            } else {
+                submitButton.prop('disabled', false);
+            }
+        }
+
     </script>
   </body>
 </html>

@@ -2,22 +2,24 @@
     <form method="POST" action="{% url 'post' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
-            <textarea class="form-control bg-light-secondary border-0 rounded-4" name="post-text" rows="2" placeholder="Want to share something?" style="resize: none;"></textarea>
+            <textarea class="form-control bg-light-secondary border-0 rounded-4" name="post-text" rows="2" placeholder="Want to share something?" style="resize: none;" onkeyup="checkBlankPost(this)"></textarea>
         </div>
         <div class='row'>
             <label for="post-photo" class="col-auto">
                 <a class='btn btn-light-secondary border-0 rounded-3'>
                     <i class="bi bi-image"></i>
-                    <input class='visually-hidden' id="post-photo" type='file' name='post-photo' accept='image/*' onchange="updateFileName(this, 'photo')">
+                    <input class='visually-hidden' id="post-photo" type='file' name='post-photo' accept='image/*' onchange="selectFile(this, 'photo')">
                 </a>
                 <span id="photo-file-name" style='word-wrap: break-word;'></span>
+                <button id='photo-remove-btn' type="button" class="btn-close" aria-label="Close" style='font-size:12px; display: none;' onclick="removeFile(this, 'photo')"></button>
             </label>
             <label for="post-video" class="col-auto">
                 <a class='btn btn-light-secondary border-0 rounded-3'>
                     <i class="bi bi-film"></i>
-                    <input class='visually-hidden' id="post-video" type='file' name='post-video' accept="video/*" onchange="updateFileName(this, 'video')">
+                    <input class='visually-hidden' id="post-video" type='file' name='post-video' accept="video/*" onchange="selectFile(this, 'video')">
                 </a>
                 <span id="video-file-name" style='word-wrap: break-word;'></span>
+                <button id='video-remove-btn' type="button" class="btn-close" aria-label="Close" style='font-size:12px; display: none;' onclick="removeFile(this, 'video')"></button>
             </label>
             <div class='col'>
                 <select class='border-0 rounded-pill bg-light-secondary p-2 text-secondary fw-medium' name="post-privacy" style='font-size:12px' >
@@ -26,7 +28,7 @@
                   </select>
             </div>
 
-            <button type="submit" class="btn btn-primary col rounded-pill w-100">Post</button>
+            <button id='submit-button' type="submit" class="btn btn-primary col rounded-pill w-100" disabled>Post</button>
         </div>
     </form>
 </div>
