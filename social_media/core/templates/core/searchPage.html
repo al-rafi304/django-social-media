@@ -1,0 +1,82 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+{% if account_elements|length <= 0 and post_element|length <= 0 %}
+
+    <div class='d-flex justify-content-center align-items-center'>
+        <h2>Nothing Found</h2>
+    </div>
+
+{% else %}
+
+    <!--Showing search result for user profiles-->
+    {% if account_elements|length > 0 %}
+        <div class='container border rounded-4 bg-light p-3 mb-3 shadow-sm'>
+            <div class='col p-3 pt-0'>
+                <div class='row'>
+
+                    <span class='row fs-3 fw-medium mb-3'>People</span>
+                    {% for element in account_elements %}
+
+                        <div class='row px-0 mb-4 d-flex align-items-center'>
+                            <div class='col-auto'>
+                                <a href="{% url 'profile' account_id=element.account.id %}">
+                                    <img src="{{ element.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="65" height="65">
+                                </a>
+                            </div>
+                            <div class='col ps-0' style='line-height: 1.2'>
+                                <div class='row'>
+                                    <span>
+                                        <a class='name-link' href="{% url 'profile' account_id=element.account.id %}">
+                                            <b>{{ element.account.first_name }} {{ element.account.last_name }}</b>
+                                        </a>
+                                    </span>
+                                    <br>
+                                    <span class='text-secondary'>@{{ element.account.username }}</span>
+                                </div>
+                                <span class='row m-0 mt-1'>{{ element.account.bio }}</span>
+                            </div>
+                            <div class='col d-flex flex-row-reverse'>
+                                <form method='POST' action="{% url 'follow-button' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="account-id" value="{{ element.account.id }}">
+
+                                    {% if element.account != request.user %}
+                                        {% if element.isFollowing %}
+                                            <button type='submit' class='btn btn-outline-danger rounded-pill border-danger border-2'>
+                                                <span class='fw-bold'>Unfollow</span>
+                                            </button>
+                                        {% else %}
+                                            <button type='submit' class='btn btn-primary rounded-pill border border-0'>
+                                                <span class='fw-bold'>Follow</span>
+                                            </button>
+                                        {% endif %}
+                                    {% endif %}
+
+                                </form>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <!--Showing search resuls for posts-->
+    {% for element in post_element %}
+    <div>
+        <!--Share Post Prompt-->
+        {% include 'core/elements/postSharePrompt.html' with element=element %}
+
+        <!--Post Container-->
+        {% include 'core/elements/postContainer.html' with element=element %}
+
+    </div>
+    {% endfor %}
+
+{% endif %}
+
+{% endblock content %}

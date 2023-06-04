@@ -18,13 +18,15 @@
                     <form method='POST' action="{% url 'follow-button' %}">
                         {% csrf_token %}
                         <input type="hidden" name="account-id" value="{{ account.id }}">
-                        <button type='submit' class='btn btn-primary rounded-pill border border-0'>
                             {% if following_info %}
-                                <span class='fw-bold'>Unfollow</span>
+                                <button type='submit' class='btn btn-outline-danger rounded-pill border-danger border-2'>
+                                    <span class='fw-bold'>Unfollow</span>
+                                </button>
                             {% else %}
-                                <span class='fw-bold'>Follow</span>
+                                <button type='submit' class='btn btn-primary rounded-pill border border-0'>
+                                    <span class='fw-bold'>Follow</span>
+                                </button>
                             {% endif %}
-                        </button>
                     </form>
                 {% endif %}
             </div>

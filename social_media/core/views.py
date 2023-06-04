@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 
 from .models import Post, Comment, Follow, Like, CommentLike, Account
 
-def getPostElement(request, account_id=None):
+def getPostElement(request, given_posts=None, account_id=None):
     following = Follow.objects.filter(follower = request.user).values('account').values_list('account', flat=True)
     if account_id == None:
         posts = Post.objects.filter(
@@ -18,6 +19,11 @@ def getPostElement(request, account_id=None):
             # All Posts of account_id & (Public Posts | Following only post and user is following | Posts are of users)
             Q(account=Account.objects.get(id=account_id)) & (Q(privacy=Post.EVERYONE) | (Q(privacy=Post.FOLLOWERS) & Q(account__in = following)) | Q(account=request.user))
             ).order_by('-posted_at')
+        
+    # If a list of posts has been provided, it will only return those posts with correct filtering
+    if given_posts != None:
+        posts = [post for post in posts if post in given_posts]
+    
 
     post_element = []
 
@@ -190,3 +196,29 @@ def followButton(request):
         following.save()
 
     return redirect('profile', account_id=request.POST['account-id'])
+
+def search(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            query = request.GET.get('search')
+
+            if query == None:
+                raise Http404("You didn't search anything dummy !")
+            
+            posts = Post.objects.filter(text__contains = query)
+            accounts = Account.objects.filter(
+                Q(first_name__contains = query) | Q(username__contains = query)
+            )
+            
+            account_element = []
+            for account in accounts:
+                temp = {
+                    'account': account,
+                    'isFollowing': Follow.objects.filter(account=account, follower=request.user).exists()
+                }
+                account_element.append(temp)
+
+    return render(request, 'core/searchPage.html', {
+        'account_elements': account_element,
+        'post_element': getPostElement(request, posts),
+    })
