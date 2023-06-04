@@ -2,7 +2,7 @@
     <form method="POST" action="{% url 'post' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
-            <textarea class="form-control bg-light-secondary border-0 rounded-4" name="post-text" rows="2" placeholder="Want to share something?" style="resize: none;" onkeyup="checkBlankPost(this)"></textarea>
+            <textarea id='post-input' class="form-control bg-light-secondary border-0 rounded-4" name="post-text" rows="2" placeholder="Want to share something?" style="resize: none;"></textarea>
         </div>
         <div class='row'>
             <label for="post-photo" class="col-auto">

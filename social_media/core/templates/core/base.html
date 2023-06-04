@@ -203,25 +203,29 @@
             $(button).hide();
         }
 
-        function checkBlankPost(input){
+        // Restricts blank posts
+        $('#post-input').on('input', function(e) {
+            input = $(this);
             submitButton = $('#submit-button');
-            console.log(input.value);
-            if (input.value == '') {
-                submitButton.prop("disabled",true);
-            } else {
-                submitButton.prop('disabled', false);
-            }
-        }
 
-        function checkBlankComment(input){
-            submitButton = $(input).siblings('.comment-button');
-            console.log(input.value, submitButton);
-            if (input.value == '') {
-                submitButton.prop("disabled",true);
+            if (input.val() == '') {
+                submitButton.prop("disabled", true);
             } else {
                 submitButton.prop('disabled', false);
             }
-        }
+        });
+
+        // Restricts blank comments
+        $('.comment-input').on('input', function(e) {
+            input = $(this);
+            submitButton = $(input).siblings('.comment-button');
+
+            if (input.val() == '') {
+                submitButton.prop("disabled", true);
+            } else {
+                submitButton.prop('disabled', false);
+            }
+        });
 
     </script>
   </body>
