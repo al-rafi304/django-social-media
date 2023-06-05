@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+{% if elements|length %}
+
+    {% for element in elements %}
+        {% include 'core/elements/postSharePrompt.html' with element=element %}
+
+        {% include 'core/elements/postContainer.html' with element=element%}
+    {% endfor %}
+
+{% else %}
+<span class='d-flex justify-content-center'>
+    <h1>No post found !</h1>
+</span>
+{% endif %}
+
+{% endblock content %}

@@ -222,3 +222,11 @@ def search(request):
         'account_elements': account_element,
         'post_element': getPostElement(request, posts),
     })
+
+def postPage(request, post_id):
+    post = Post.objects.filter(id=post_id)
+    element = getPostElement(request, given_posts=post)
+    print(element)
+    return render(request, 'core/postPage.html', {
+        'elements': element
+    })

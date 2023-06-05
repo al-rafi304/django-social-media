@@ -10,5 +10,6 @@ urlpatterns = [
     path('<int:post_id>/comment', views.comment, name='comment'),
     path('<int:post_id>/like', views.like, name='like'),
     path('<int:comment_id>/comment-like', views.commentLike, name='comment-like'),
-    path('followButton', views.followButton, name='follow-button')
+    path('followButton', views.followButton, name='follow-button'),
+    path('post/<int:post_id>', views.postPage, name ='post-page'),
 ]
