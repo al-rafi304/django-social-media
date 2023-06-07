@@ -1,140 +1,163 @@
 {% load time_diff %}
 
-<div class='container border rounded-4 bg-light p-3 pb-2 mb-3 shadow-sm postContainer'>
-    <!--Post-->
-    <div>
-
-        <!--Heading-->
-        <div class='row mb-2'>
-            <div class='col-auto'>
-                <a href="{% url 'profile' account_id=element.post.account.id %}">
-                    <img src="{{ element.post.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="40" height="40">
-                </a>
-            </div>
-            <div class='col ps-0' style='line-height: 1.2'>
-                <span>
-                    <a class='name-link' href="{% url 'profile' account_id=element.post.account.id %}"><b>{{ element.post.account.first_name }} {{ element.post.account.last_name }}</b></a>
-                    <span class='text-secondary'> · {{ element.post.posted_at|custom_time_format}}</span>
-                </span>
-                <br>
-                <span class='text-secondary'>@{{ element.post.account.username }}</span>
-            </div>
+<div>
+    <!--Post Share Prompt-->
+    <div class='sharePrompt' style='display: none'>
+        <div class='container border rounded-4 bg-light p-3 pb-2 shadow-sm' >
+            <form method="POST" action="{% url 'share-post' post_id=element.post.id %}">
+                {% csrf_token %}
+                <div class='row'>
+                    <h6 class='col'>Share @{{ element.post.account.username }}'s post</h6>
+                </div>
+                <textarea class="form-control bg-light-secondary border-0 rounded-4 mb-2" name="share-text" rows="1" placeholder="Want to share something?" style="resize: none;"></textarea>
+                <div class='d-flex flex-row-reverse'>
+                    <button type='submit' class='btn btn-sm mx-1 btn-primary rounded-pill'>Share</button>
+                    <a class='btn btn-sm mx-1 btn-secondary rounded-pill cancel-share'>Cancel</a>
+                </div>
+            </form>
         </div>
 
-        <!--Post Paragraph-->
-        <div class='mb-0 pb-0'>
-            <p style="word-wrap: break-word;">{{ element.post.text|linebreaksbr }}</p>
+        <div class='d-flex justify-content-center'>
+            <div class='vr m-2' style='height: 20px'></div>
         </div>
-        
-        <!--Post Media-->
+    </div>
+
+    <div class='container border rounded-4 bg-light p-3 pb-2 mb-3 shadow-sm postContainer'>
+        <!--Post-->
         <div>
-            {% if element.post.photo %}
-            <img class='w-100 border-0 rounded-4' src='{{ element.post.photo.url }}'>
-            {% endif %}
-            {% if element.post.video %}
-            <video class='w-100 h-100 broder-0 rounded-4' controls>
-                <source src="{{ element.post.video.url }}" type="{{ element.post.video.content_type }}">
-                Your browser does not support the video tag.
-            </video>
-            {% endif %}
-        </div>
-        
-        <!--Shared Post-->
-        {% if element.post.shared_post %}
-            <div class='container border rounded-4 p-3 pb-2 mb-3'>
-                <!--Heading-->
-                <div class='row mb-2'>
-                    <div class='col-auto'>
-                        <a href="{% url 'profile' account_id=element.post.shared_post.account.id %}">
-                            <img src="{{ element.post.shared_post.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="40" height="40">
-                        </a>
-                    </div>
-                    <div class='col ps-0' style='line-height: 1.2'>
-                        <span>
-                            <a class='name-link' href="{% url 'profile' account_id=element.post.shared_post.account.id %}">
-                                <b>{{ element.post.shared_post.account.first_name }} {{ element.post.shared_post.account.last_name }}</b>
-                            </a>
-                            <span class='text-secondary'> · {{ element.post.shared_post.posted_at|custom_time_format}}</span>
-                        </span>
-                        <br>
-                        <span class='text-secondary'>@{{ element.post.shared_post.account.username }}</span>
-                    </div>
-                </div>
 
-                <!--Post Paragraph-->
-                <div class='mb-0 pb-0'>
-                    <p style="word-wrap: break-word;">{{ element.post.shared_post.text|linebreaksbr }}</p>
+            <!--Heading-->
+            <div class='row mb-2'>
+                <div class='col-auto'>
+                    <a href="{% url 'profile' account_id=element.post.account.id %}">
+                        <img src="{{ element.post.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="40" height="40">
+                    </a>
                 </div>
-                
-                <!--Post Media-->
-                <div class='mb-1'>
-                    {% if element.post.shared_post.photo %}
-                    <img class='w-100 border-0 rounded-4' src='{{ element.post.shared_post.photo.url }}'>
-                    {% endif %}
-                    {% if element.post.shared_post.video %}
-                    <video class='w-100 h-100 broder-0 rounded-4' controls>
-                        <source src="{{ element.post.shared_post.video.url }}" type="{{ element.post.shared_post.video.content_type }}">
-                        Your browser does not support the video tag.
-                    </video>
-                    {% endif %}
+                <div class='col ps-0' style='line-height: 1.2'>
+                    <span>
+                        <a class='name-link' href="{% url 'profile' account_id=element.post.account.id %}"><b>{{ element.post.account.first_name }} {{ element.post.account.last_name }}</b></a>
+                        <span class='text-secondary'> · {{ element.post.posted_at|custom_time_format}}</span>
+                    </span>
+                    <br>
+                    <span class='text-secondary'>@{{ element.post.account.username }}</span>
                 </div>
             </div>
-        {% endif %}
-    </div>
-    <hr class='mb-0'>
-    
-    <!--Interaction Buttons-->
-    <div class='row m-1'>
-        <!--Like Button-->
-        <a type='button' href="{% url 'like' post_id=element.post.id %}" class='col btn btn-light border-0 rounded-3'>
-            {% if element.liked %}
-                <i class="bi bi-heart-fill"></i>
-            {% else %}
-                <i class="bi bi-heart"></i>
-            {% endif %}
 
-            {% if element.post.likeCount > 0 %}
-                <span>{{ element.post.likeCount|custom_number_format }}</span>
-            {% endif %}
-        </a>
-        
-        <!--Comment Button-->
-        <a type='button' class='col btn btn-light border-0 rounded-3'>
-            <i class="bi bi-chat"></i>
-            {% if element.post.commentCount > 0 %}
-                <span>{{ element.post.commentCount|custom_number_format }}</span>
-            {% endif %}
-        </a>
-        
-        <!--Share Button-->
-        <a type='button' class='col btn btn-light border-0 rounded-3 shareBtn'>
-            <i class="bi bi-share"></i>
-            {% if element.post.shareCount > 0 %}
-                <span>{{ element.post.shareCount|custom_number_format }}</span>
-            {% endif %}
-        </a>
-    </div>
-    
-    <hr class='mt-0'>
-
-    <!--Comment Prompt-->
-    <form method='POST' class='comment-form' action="{% url 'comment' post_id=element.post.id %}">
-        {% csrf_token %}
-        <div class="input-group mb-3">
-            <input type="text" name="comment-text" class="comment-input form-control rounded-pill border-0" placeholder="Enter Comment..." aria-describedby="button-addon2" style="background-color: #F0F2F5">
-            <div class='p-1'></div>
-            <button class="btn btn-outline-secondary border-0 rounded-pill comment-button" type="submit" id="button-addon2" disabled>
-                <i class="bi bi-send-fill"></i>
-            </button>
-        </div>
-    </form>
-
-    <!--All comments-->
-    <div class='comment-container'>
-        {% for comment_element in element.comment_element %}
+            <!--Post Paragraph-->
+            <div class='mb-0 pb-0'>
+                <p style="word-wrap: break-word;">{{ element.post.text|linebreaksbr }}</p>
+            </div>
             
-            {% include 'core/elements/commentElement.html' with comment_element=comment_element %}
+            <!--Post Media-->
+            <div>
+                {% if element.post.photo %}
+                <img class='w-100 border-0 rounded-4' src='{{ element.post.photo.url }}'>
+                {% endif %}
+                {% if element.post.video %}
+                <video class='w-100 h-100 broder-0 rounded-4' controls>
+                    <source src="{{ element.post.video.url }}" type="{{ element.post.video.content_type }}">
+                    Your browser does not support the video tag.
+                </video>
+                {% endif %}
+            </div>
+            
+            <!--Shared Post-->
+            {% if element.post.shared_post %}
+                <div class='container border rounded-4 p-3 pb-2 mb-3'>
+                    <!--Heading-->
+                    <div class='row mb-2'>
+                        <div class='col-auto'>
+                            <a href="{% url 'profile' account_id=element.post.shared_post.account.id %}">
+                                <img src="{{ element.post.shared_post.account.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="40" height="40">
+                            </a>
+                        </div>
+                        <div class='col ps-0' style='line-height: 1.2'>
+                            <span>
+                                <a class='name-link' href="{% url 'profile' account_id=element.post.shared_post.account.id %}">
+                                    <b>{{ element.post.shared_post.account.first_name }} {{ element.post.shared_post.account.last_name }}</b>
+                                </a>
+                                <span class='text-secondary'> · {{ element.post.shared_post.posted_at|custom_time_format}}</span>
+                            </span>
+                            <br>
+                            <span class='text-secondary'>@{{ element.post.shared_post.account.username }}</span>
+                        </div>
+                    </div>
 
-        {% endfor %}
+                    <!--Post Paragraph-->
+                    <div class='mb-0 pb-0'>
+                        <p style="word-wrap: break-word;">{{ element.post.shared_post.text|linebreaksbr }}</p>
+                    </div>
+                    
+                    <!--Post Media-->
+                    <div class='mb-1'>
+                        {% if element.post.shared_post.photo %}
+                        <img class='w-100 border-0 rounded-4' src='{{ element.post.shared_post.photo.url }}'>
+                        {% endif %}
+                        {% if element.post.shared_post.video %}
+                        <video class='w-100 h-100 broder-0 rounded-4' controls>
+                            <source src="{{ element.post.shared_post.video.url }}" type="{{ element.post.shared_post.video.content_type }}">
+                            Your browser does not support the video tag.
+                        </video>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <hr class='mb-0'>
+        
+        <!--Interaction Buttons-->
+        <div class='row m-1'>
+            <!--Like Button-->
+            <a type='button' href="{% url 'like' post_id=element.post.id %}" class='col btn btn-light border-0 rounded-3'>
+                {% if element.liked %}
+                    <i class="bi bi-heart-fill"></i>
+                {% else %}
+                    <i class="bi bi-heart"></i>
+                {% endif %}
+
+                {% if element.post.likeCount > 0 %}
+                    <span>{{ element.post.likeCount|custom_number_format }}</span>
+                {% endif %}
+            </a>
+            
+            <!--Comment Button-->
+            <a type='button' class='col btn btn-light border-0 rounded-3'>
+                <i class="bi bi-chat"></i>
+                {% if element.post.commentCount > 0 %}
+                    <span>{{ element.post.commentCount|custom_number_format }}</span>
+                {% endif %}
+            </a>
+            
+            <!--Share Button-->
+            <a type='button' class='col btn btn-light border-0 rounded-3 shareBtn'>
+                <i class="bi bi-share"></i>
+                {% if element.post.shareCount > 0 %}
+                    <span>{{ element.post.shareCount|custom_number_format }}</span>
+                {% endif %}
+            </a>
+        </div>
+        
+        <hr class='mt-0'>
+
+        <!--Comment Prompt-->
+        <form method='POST' class='comment-form' action="{% url 'comment' post_id=element.post.id %}">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <input type="text" name="comment-text" class="comment-input form-control rounded-pill border-0" placeholder="Enter Comment..." aria-describedby="button-addon2" style="background-color: #F0F2F5">
+                <div class='p-1'></div>
+                <button class="btn btn-outline-secondary border-0 rounded-pill comment-button" type="submit" id="button-addon2" disabled>
+                    <i class="bi bi-send-fill"></i>
+                </button>
+            </div>
+        </form>
+
+        <!--All comments-->
+        <div class='comment-container'>
+            {% for comment_element in element.comment_element %}
+                
+                {% include 'core/elements/commentElement.html' with comment_element=comment_element %}
+
+            {% endfor %}
+        </div>
     </div>
 </div>

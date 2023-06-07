@@ -58,7 +58,6 @@ def homePage(request):
 
         return render(request, 'core/home.html', {
             'post_element': post_element,
-            'privacy_options': {'everyone': Post.EVERYONE, 'followers': Post.FOLLOWERS}
         })
 
 def profilePage(request, account_id):
@@ -88,7 +87,17 @@ def post(request):
             post.save()
             messages.success(request, 'Your post has been submitted!')
 
-        return redirect('home')
+            post_HTML = render_to_string('core/elements/postContainer.html', {
+                'element': {
+                    'post': post,
+                    'comment_element': None,
+                    'liked': False
+                }
+            })
+
+        return JsonResponse({
+            'post_HTML': post_HTML
+        })
 
 @login_required
 def sharePost(request, post_id):
@@ -146,7 +155,6 @@ def comment(request, post_id):
     return JsonResponse({
         'comment_HTML': comment_HTML
     })
-    # return redirect('home')
 
 @login_required
 def like(request, post_id):

@@ -1,5 +1,5 @@
 <div class='container border rounded-4 bg-light p-3 mb-3 shadow-sm'>
-    <form method="POST" action="{% url 'post' %}" enctype="multipart/form-data">
+    <form method="POST" id='post-form' action="{% url 'post' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             <textarea id='post-input' class="form-control bg-light-secondary border-0 rounded-4" name="post-text" rows="2" placeholder="Want to share something?" style="resize: none;"></textarea>

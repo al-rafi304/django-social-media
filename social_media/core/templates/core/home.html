@@ -7,16 +7,16 @@
     <!--Post Prompt-->
     {% include 'core/elements/postPrompt.html' %}
 
-    {% for element in post_element %}
-    <div>
-        <!--Share Post Prompt-->
-        {% include 'core/elements/postSharePrompt.html' with element=element %}
+    <div id='all-post-container'>
+        {% for element in post_element %}
+            <div>
 
-        <!--Post Container-->
-        {% include 'core/elements/postContainer.html' with element=element %}
-
+                <!--Post Container-->
+                {% include 'core/elements/postContainer.html' with element=element %}
+            
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 
 </div>
 {% endblock content %}
