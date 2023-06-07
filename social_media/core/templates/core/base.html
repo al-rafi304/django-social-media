@@ -227,6 +227,40 @@
             }
         });
 
+        // Comment posting with AJAX
+        $(document).ready(function() {
+            $('.comment-form').submit(function(e) {
+
+                // Prevents default behavior
+                e.preventDefault();
+
+                var form = $(this);
+                var url = form.attr('action');
+                var formData = new FormData(form[0]);
+
+                console.log(formData, url)
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        var commentContainer = form.siblings('.comment-container');
+                        var newCommentHTML = response.comment_HTML
+
+                        // prepend adds the new item at the top, append adds the item at the bottom
+                        commentContainer.prepend(newCommentHTML);
+
+                        form[0].reset();
+                    }
+                });
+
+            });
+        });
+
     </script>
   </body>
 </html>

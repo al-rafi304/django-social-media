@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 
 from .models import Post, Comment, Follow, Like, CommentLike, Account
@@ -131,7 +133,20 @@ def comment(request, post_id):
 
         post.commentCount += 1
         post.save()
-    return redirect('home')
+
+        # Works like render() but render_to_string() returns it in a string format instead of an http response
+        comment_HTML = render_to_string('core/elements/commentElement.html', {
+            'comment_element': {
+                'comment': comment,
+                'liked': False
+            }
+        })
+
+    # Using jsonResponse for accessing the comment_HTML in jQuery
+    return JsonResponse({
+        'comment_HTML': comment_HTML
+    })
+    # return redirect('home')
 
 @login_required
 def like(request, post_id):
