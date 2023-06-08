@@ -172,7 +172,8 @@ def comment(request, post_id):
 
     # Using jsonResponse for accessing the comment_HTML in jQuery
     return JsonResponse({
-        'comment_HTML': comment_HTML
+        'comment_HTML': comment_HTML,
+        'commentCount': post.commentCount
     })
 
 @login_required

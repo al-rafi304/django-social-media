@@ -205,6 +205,8 @@
                     var url = form.attr('action');
                     var formData = new FormData(form[0]);
 
+                    var commentCountSpan = form.siblings('.interaction-btn-container').find('.comment-count-span');
+                    
                     $.ajax({
                         url: url,
                         type: 'POST',
@@ -215,11 +217,19 @@
                         success: function(response) {
                             var commentContainer = form.siblings('.comment-container');
                             var newCommentHTML = $(response.comment_HTML)
+                            var commentCount = response.commentCount
 
                             newCommentHTML.hide()
                             // prepend adds the new item at the top, append adds the item at the bottom
                             commentContainer.prepend(newCommentHTML);
                             newCommentHTML.slideDown();
+
+                            // Setting comment count
+                            if (commentCount > 0) {
+                                commentCountSpan.text(numberFormat(commentCount))
+                            } else if (commentCount == 0) {
+                                commentCountSpan.text('')
+                            } 
 
                             form[0].reset();
                         }
