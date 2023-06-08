@@ -365,6 +365,46 @@
                         }
                     });
                 });
+
+                //Liking comments with AJAX
+                $(document).on('submit', '.comment-like-form', function(e){
+                    e.preventDefault();
+
+                    var form = $(this);
+                    var url = form.attr('action');
+                    var formData = new FormData(form[0]);
+
+                    var buttonIcon = form.children('button').children('i');
+                    var likeCountSpan = form.children('button').children('span');
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            var liked = response.liked
+                            var likeCount = response.likeCount
+
+                            if (liked) {
+                                buttonIcon.replaceWith('<i class="bi bi-heart-fill"></i>')
+                            } else {
+                                buttonIcon.replaceWith('<i class="bi bi-heart"></i>')
+                            }
+
+                            if (likeCount > 0) {
+                                likeCountSpan.text(numberFormat(likeCount))
+                            } else if (likeCount == 0) {
+                                likeCountSpan.text('')
+                            }
+
+                            form[0].reset();
+
+                        }
+                    });
+                });
                 
                 // For formating like count numbers, just like the template tag
                 function numberFormat(num) {

@@ -20,18 +20,23 @@
                     </p>
                 </div>
             </div>
-            <div class='row ps-2 ' style='font-size: 14px'>
-                <a type='button' href="{% url 'comment-like' comment_id=comment_element.comment.id %}" class='col-auto btn btn-light btn-sm border-0 rounded-3'>
-                    {% if comment_element.liked %}
-                        <i class="bi bi-heart-fill"></i>
-                    {% else %}
-                        <i class="bi bi-heart"></i>
-                    {% endif %}
+            <div class='row ps-1 ' style='font-size: 14px'>
+                <form method='POST' action="{% url 'comment-like' comment_id=comment_element.comment.id %}" class='col-auto px-0 comment-like-form'>
+                    {% csrf_token %}
+                    <button type='submit' class='btn btn-light btn-sm border-0 rounded-3'>
+                        {% if comment_element.liked %}
+                            <i class="bi bi-heart-fill"></i>
+                        {% else %}
+                            <i class="bi bi-heart"></i>
+                        {% endif %}
 
-                    {% if comment_element.comment.likeCount > 0 %}
-                        <span>{{ comment_element.comment.likeCount|custom_number_format }}</span>
-                    {% endif %}
-                </a>
+                        <span>
+                            {% if comment_element.comment.likeCount > 0 %}
+                                {{ comment_element.comment.likeCount|custom_number_format }}
+                            {% endif %}
+                        </span>
+                    </button>
+                </form>
                 <span class='col text-secondary mt-1 ps-0 p-0'>· {{ comment_element.comment.commented_at|custom_time_format}}</span>
             </div>
         </div>

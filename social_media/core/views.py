@@ -165,11 +165,13 @@ def comment(request, post_id):
 
         # Works like render() but render_to_string() returns it in a string format instead of an http response
         comment_HTML = render_to_string('core/elements/commentElement.html', {
-            'comment_element': {
-                'comment': comment,
-                'liked': False
-            }
-        })
+                'comment_element': {
+                    'comment': comment,
+                    'liked': False
+                }
+            },
+            request=request
+        )
 
     # Using jsonResponse for accessing the comment_HTML in jQuery
     return JsonResponse({
@@ -199,24 +201,30 @@ def like(request, post_id):
         'liked': liked,
         'likeCount': post.likeCount
     })
-    return redirect('home')
 
 @login_required
 def commentLike(request, comment_id):
-    comment = Comment.objects.get(id=comment_id)
-    if CommentLike.objects.filter(comment=comment, account=request.user).exists() == False:
-        like = CommentLike()
-        like.comment = comment
-        like.account = request.user
-        like.save()
-        comment.likeCount += 1
-    else:
-        like = CommentLike.objects.get(comment=comment, account=request.user)
-        like.delete()
-        comment.likeCount -= 1
-    
-    comment.save()
-    return redirect('home')
+    if request.method == 'POST':
+        comment = Comment.objects.get(id=comment_id)
+        if CommentLike.objects.filter(comment=comment, account=request.user).exists() == False:
+            like = CommentLike()
+            like.comment = comment
+            like.account = request.user
+            like.save()
+            comment.likeCount += 1
+            liked = True
+
+        else:
+            like = CommentLike.objects.get(comment=comment, account=request.user)
+            like.delete()
+            comment.likeCount -= 1
+            liked = False
+
+        comment.save()
+    return JsonResponse({
+        'liked': liked,
+        'likeCount': comment.likeCount
+    })
 
 @login_required
 def followButton(request):
