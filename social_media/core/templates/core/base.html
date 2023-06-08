@@ -233,6 +233,8 @@
                     var url = form.attr('action');
                     var formData = new FormData(form[0]);
 
+                    var submitButton = $('#submit-button');
+
                     $.ajax({
                         url: url,
                         type: 'POST',
@@ -255,6 +257,7 @@
                             $("#video-remove-btn").hide();
                             $('#post-video').parents('label').show();
                             $('#post-photo').parents('label').show();
+                            submitButton.prop("disabled", true);
                             form[0].reset();
 
                             // Animation for newly added post
