@@ -87,13 +87,16 @@ def post(request):
             post.save()
             messages.success(request, 'Your post has been submitted!')
 
+            # YOU NEED TO PASS 'request', otherwise csrf_token won't be present
             post_HTML = render_to_string('core/elements/postContainer.html', {
-                'element': {
-                    'post': post,
-                    'comment_element': None,
-                    'liked': False
-                }
-            })
+                    'element': {
+                        'post': post,
+                        'comment_element': None,
+                        'liked': False
+                    },
+                },
+                request=request
+            )
 
         return JsonResponse({
             'post_HTML': post_HTML

@@ -195,7 +195,7 @@
                 });
 
                 // Comment posting with AJAX
-                $('.comment-form').submit(function(e) {
+                $(document).on('submit', '.comment-form', function(e) {
 
                     // Prevents default behavior
                     e.preventDefault();
