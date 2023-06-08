@@ -108,17 +108,22 @@
         <!--Interaction Buttons-->
         <div class='row m-1'>
             <!--Like Button-->
-            <a type='button' href="{% url 'like' post_id=element.post.id %}" class='col btn btn-light border-0 rounded-3'>
-                {% if element.liked %}
-                    <i class="bi bi-heart-fill"></i>
-                {% else %}
-                    <i class="bi bi-heart"></i>
-                {% endif %}
-
-                {% if element.post.likeCount > 0 %}
-                    <span>{{ element.post.likeCount|custom_number_format }}</span>
-                {% endif %}
-            </a>
+            <form method='POST' action="{% url 'like' post_id=element.post.id %}" class='col p-0 like-form'>
+                {% csrf_token %}
+                <button type='submit' class='w-100 btn btn-light border-0 rounded-3 px-0'>
+                    {% if element.liked %}
+                        <i class="bi bi-heart-fill"></i>
+                    {% else %}
+                        <i class="bi bi-heart"></i>
+                    {% endif %}
+                    
+                    <span>
+                        {% if element.post.likeCount > 0 %}
+                            {{ element.post.likeCount|custom_number_format }}
+                        {% endif %}
+                    </span>
+                </button>
+            </form>
             
             <!--Comment Button-->
             <a type='button' class='col btn btn-light border-0 rounded-3'>

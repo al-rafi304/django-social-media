@@ -177,20 +177,26 @@ def comment(request, post_id):
 
 @login_required
 def like(request, post_id):
-    post = Post.objects.get(id=post_id)
-    if Like.objects.filter(post=post_id, account=request.user).exists() == False:       # Have to use filter instead of get to use exists()
-        like = Like()
-        like.account = request.user
-        like.post = post
-        like.save()
+    if request.method == 'POST':
+        post = Post.objects.get(id=post_id)
+        if Like.objects.filter(post=post_id, account=request.user).exists() == False:       # Have to use filter instead of get to use exists()
+            like = Like()
+            like.account = request.user
+            like.post = post
+            like.save()
 
-        post.likeCount += 1
-    else:
-        like = Like.objects.get(post=post_id, account=request.user)
-        like.delete()
-        post.likeCount -= 1
-    
-    post.save()
+            post.likeCount += 1
+            liked = True
+        else:
+            like = Like.objects.get(post=post_id, account=request.user)
+            like.delete()
+            post.likeCount -= 1
+            liked = False
+        post.save()
+    return JsonResponse({
+        'liked': liked,
+        'likeCount': post.likeCount
+    })
     return redirect('home')
 
 @login_required

@@ -1,4 +1,6 @@
 {% load static %}
+{% load time_diff %}
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -33,7 +35,7 @@
                 background-color: #F0F2F5;
             }
 
-            a.btn-light:hover{
+            .btn-light:hover{
                 background-color: #F0F2F5 !important;
             }
 
@@ -305,6 +307,63 @@
                         }
                     });
                 });
+
+                //Liking with AJAX
+                $(document).on('submit', '.like-form', function(e){
+                    e.preventDefault();
+
+                    var form = $(this);
+                    var url = form.attr('action');
+                    var formData = new FormData(form[0]);
+
+                    var buttonIcon = form.children('button').children('i');
+                    var likeCountSpan = form.children('button').children('span');
+                    console.log(buttonIcon);
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            
+                            liked = response.liked
+                            likeCount = response.likeCount
+                            if (liked) {
+                                buttonIcon.replaceWith('<i class="bi bi-heart-fill"></i>')
+                            } else {
+                                buttonIcon.replaceWith('<i class="bi bi-heart"></i>')
+                            }
+
+                            if (likeCount > 0) {
+                                likeCountSpan.text(numberFormat(likeCount))
+                            } else if (likeCount == 0) {
+                                likeCountSpan.text('')
+                            }
+
+                            form[0].reset();
+
+                        }
+                    });
+                });
+                
+                // For formating like count numbers, just like the template tag
+                function numberFormat(num) {
+                    let newNum = String(num);
+                    if (num > 999) {
+                        newNum = (num / 1000).toFixed(1) + 'K';
+                    }
+                    if (num > 999999) {
+                        newNum = (num / 1000000).toFixed(1) + 'M';
+                    }
+                    if (num > 999999999) {
+                        newNum = (num / 1000000000).toFixed(1) + 'B';
+                    }
+                    
+                    return newNum;
+                }
             });
 
         </script>
