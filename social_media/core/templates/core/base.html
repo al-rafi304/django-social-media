@@ -150,7 +150,6 @@
                 // Unhide and scroll to the sharePrompt when share button is clicked
                 $(document).on('click', '.shareBtn', function() {
                     var sharePrompt = $(this).parents('.postContainer').siblings('.sharePrompt');
-                    console.log(sharePrompt)
 
                     sharePrompt.fadeIn(500);
                     
@@ -256,6 +255,43 @@
                             $("#video-remove-btn").hide();
                             $('#post-video').parents('label').show();
                             $('#post-photo').parents('label').show();
+                            form[0].reset();
+
+                            // Animation for newly added post
+                            postHTML.hide();
+                            postContainer.prepend(postHTML);
+                            postHTML.slideDown();
+
+                        }
+                    });
+                });
+
+                //Sharing with AJAX
+                $(document).on('submit', '.share-form', function(e){
+                    e.preventDefault();
+
+                    var form = $(this);
+                    var url = form.attr('action');
+                    var formData = new FormData(form[0]);
+
+                    // Hiding sharePrompt
+                    sharePrompt = form.parents('.sharePrompt');
+                    sharePrompt.slideUp();
+                    console.log(sharePrompt);
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            var postContainer = $('#all-post-container');
+                            var postHTML = $(response.post_HTML);
+                            //console.log("post_HTML", response.post_HTML)
+
+                            // Resetting the post prompt
                             form[0].reset();
 
                             // Animation for newly added post

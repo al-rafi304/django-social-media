@@ -4,7 +4,7 @@
     <!--Post Share Prompt-->
     <div class='sharePrompt' style='display: none'>
         <div class='container border rounded-4 bg-light p-3 pb-2 shadow-sm' >
-            <form method="POST" action="{% url 'share-post' post_id=element.post.id %}">
+            <form class='share-form' method="POST" action="{% url 'share-post' post_id=element.post.id %}">
                 {% csrf_token %}
                 <div class='row'>
                     <h6 class='col'>Share @{{ element.post.account.username }}'s post</h6>

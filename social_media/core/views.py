@@ -127,8 +127,20 @@ def sharePost(request, post_id):
         post.save()
         new_post.save()
         messages.success(request, 'You have shared a post')
+        
+        post_HTML = render_to_string('core/elements/postContainer.html', {
+                    'element': {
+                        'post': new_post,
+                        'comment_element': None,
+                        'liked': False
+                    },
+                },
+                request=request
+            )
 
-    return redirect('home')
+    return JsonResponse({
+        'post_HTML': post_HTML
+    })
 
 @login_required
 def comment(request, post_id):
