@@ -58,6 +58,7 @@ def homePage(request):
 
         return render(request, 'core/home.html', {
             'post_element': post_element,
+            'privacy_options': {'everyone': Post.EVERYONE, 'followers': Post.FOLLOWERS}
         })
 
 def profilePage(request, account_id):
@@ -68,6 +69,7 @@ def profilePage(request, account_id):
     return render(request, 'core/profile.html', {
         'account': Account.objects.get(id=account_id),
         'post_element': post_element,
+        'privacy_options': {'everyone': Post.EVERYONE, 'followers': Post.FOLLOWERS},
         'following_info': Follow.objects.filter(follower=request.user, account = Account.objects.get(id=account_id))
     })
 
@@ -86,6 +88,8 @@ def post(request):
             post.video = post_video
             post.save()
             messages.success(request, 'Your post has been submitted!')
+
+            print(post_privacy, post.privacy)
 
             # YOU NEED TO PASS 'request', otherwise csrf_token won't be present
             post_HTML = render_to_string('core/elements/postContainer.html', {
