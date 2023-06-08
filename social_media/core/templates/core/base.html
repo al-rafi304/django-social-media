@@ -288,11 +288,12 @@
                     var form = $(this);
                     var url = form.attr('action');
                     var formData = new FormData(form[0]);
-
+                    
+                    var shareCountSpan = form.parents('.sharePrompt').siblings('.postContainer').find('.share-count-span');
+                    console.log(shareCountSpan)
                     // Hiding sharePrompt
                     sharePrompt = form.parents('.sharePrompt');
                     sharePrompt.slideUp();
-                    console.log(sharePrompt);
 
                     $.ajax({
                         url: url,
@@ -304,7 +305,7 @@
                         success: function(response) {
                             var postContainer = $('#all-post-container');
                             var postHTML = $(response.post_HTML);
-                            //console.log("post_HTML", response.post_HTML)
+                            var shareCount = response.shareCount;
 
                             // Resetting the post prompt
                             form[0].reset();
@@ -313,6 +314,12 @@
                             postHTML.hide();
                             postContainer.prepend(postHTML);
                             postHTML.slideDown();
+
+                            if (shareCount > 0) {
+                                shareCountSpan.text(numberFormat(shareCount));
+                            } else if (shareCount == 0) {
+                                shareCountSpan.text('');
+                            }
 
                         }
                     });

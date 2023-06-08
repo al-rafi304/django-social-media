@@ -138,9 +138,11 @@
             <!--Share Button-->
             <a type='button' class='col btn btn-light border-0 rounded-3 shareBtn'>
                 <i class="bi bi-share"></i>
-                {% if element.post.shareCount > 0 %}
-                    <span>{{ element.post.shareCount|custom_number_format }}</span>
-                {% endif %}
+                <span class='share-count-span'>
+                    {% if element.post.shareCount > 0 %}
+                        {{ element.post.shareCount|custom_number_format }}
+                    {% endif %}
+                </span>
             </a>
         </div>
         

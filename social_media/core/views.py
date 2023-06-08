@@ -143,7 +143,8 @@ def sharePost(request, post_id):
             )
 
     return JsonResponse({
-        'post_HTML': post_HTML
+        'post_HTML': post_HTML,
+        'shareCount': post.shareCount
     })
 
 @login_required
