@@ -149,14 +149,19 @@
         <hr class='mt-0'>
 
         <!--Comment Prompt-->
-        <form method='POST' class='comment-form' action="{% url 'comment' post_id=element.post.id %}">
+        <form method='POST' class='comment-form' action="{% url 'comment' post_id=element.post.id %}" autocomplete="off">
             {% csrf_token %}
             <div class="input-group mb-3">
                 <input type="text" name="comment-text" class="comment-input form-control rounded-pill border-0" placeholder="Enter Comment..." aria-describedby="button-addon2" style="background-color: #F0F2F5">
                 <div class='p-1'></div>
                 <button class="btn btn-outline-secondary border-0 rounded-pill comment-button" type="submit" id="button-addon2" disabled>
                     <i class="bi bi-send-fill"></i>
+                    <div class="d-flex justify-content-center">
+                        <div class="loading-spinner spinner-border spinner-border-sm text-primary" role="status" style='display: none'>
+                        </div>
+                    </div>
                 </button>
+                
             </div>
         </form>
 

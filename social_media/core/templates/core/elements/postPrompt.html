@@ -28,7 +28,13 @@
                   </select>
             </div>
 
-            <button id='submit-button' type="submit" class="btn btn-primary col rounded-pill w-100" disabled>Post</button>
+            <button id='submit-button' type="submit" class="btn btn-primary col rounded-pill w-100" disabled>
+                <span>Post</span>
+                <div class="d-flex justify-content-center">
+                    <div class="loading-spinner spinner-border spinner-border-sm text-light" role="status" style='display: none'>
+                    </div>
+                </div>
+            </button>
         </div>
     </form>
 </div>

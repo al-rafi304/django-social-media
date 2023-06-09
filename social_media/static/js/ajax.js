@@ -17,10 +17,6 @@ $(document).ready(function() {
     });
 
     // Hide the sharePrompt when cancel button is clicked
-    //$('.cancel-share').click(function() {
-    ///    $(this).closest('.sharePrompt').fadeOut('fast')
-    //});
-
     $(document).on('click', '.cancel-share', function() {
         $(this).closest('.sharePrompt').fadeOut('fast')
     });
@@ -60,7 +56,14 @@ $(document).ready(function() {
         var formData = new FormData(form[0]);
 
         var commentCountSpan = form.siblings('.interaction-btn-container').find('.comment-count-span');
-        
+        var submitIcon = form.find('button').children('i');
+        var loadingIcon = form.find('button').find('.loading-spinner');
+
+        submitIcon.hide();
+        loadingIcon.show();
+        form.find('.comment-button').prop('disabled', true);
+
+
         $.ajax({
             url: url,
             type: 'POST',
@@ -77,6 +80,9 @@ $(document).ready(function() {
                 // prepend adds the new item at the top, append adds the item at the bottom
                 commentContainer.prepend(newCommentHTML);
                 newCommentHTML.slideDown();
+                loadingIcon.fadeOut(function() {
+                    submitIcon.fadeIn();
+                });
 
                 // Setting comment count
                 if (commentCount > 0) {
@@ -86,6 +92,7 @@ $(document).ready(function() {
                 } 
 
                 form[0].reset();
+                
             }
         });
 
@@ -101,6 +108,22 @@ $(document).ready(function() {
 
         var submitButton = $('#submit-button');
 
+        submitButton.children('span').hide();
+        submitButton.find('.loading-spinner').show();
+
+        // Resetting the post prompt
+        $('#post-photo').value = null;
+        $('#post-video').value = null;
+        var photoNameElement = document.getElementById('photo' + "-file-name");
+        var videoNameElement = document.getElementById('video' + "-file-name");
+        photoNameElement.textContent = null;
+        videoNameElement.textContent = null;
+        $("#photo-remove-btn").hide();
+        $("#video-remove-btn").hide();
+        $('#post-video').parents('label').show();
+        $('#post-photo').parents('label').show();
+        submitButton.prop("disabled", true);
+
         $.ajax({
             url: url,
             type: 'POST',
@@ -112,19 +135,12 @@ $(document).ready(function() {
                 var postContainer = $('#all-post-container');
                 var postHTML = $(response.post_HTML);
 
-                // Resetting the post prompt
-                $('#post-photo').value = null;
-                $('#post-video').value = null;
-                var photoNameElement = document.getElementById('photo' + "-file-name");
-                var videoNameElement = document.getElementById('video' + "-file-name");
-                photoNameElement.textContent = null;
-                videoNameElement.textContent = null;
-                $("#photo-remove-btn").hide();
-                $("#video-remove-btn").hide();
-                $('#post-video').parents('label').show();
-                $('#post-photo').parents('label').show();
-                submitButton.prop("disabled", true);
+                
                 form[0].reset();
+
+                submitButton.find('.loading-spinner').fadeOut(function() {
+                    submitButton.children('span').fadeIn();
+                })
 
                 // Animation for newly added post
                 postHTML.hide();
