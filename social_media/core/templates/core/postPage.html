@@ -5,8 +5,6 @@
 {% if elements|length %}
 
     {% for element in elements %}
-        {% include 'core/elements/postSharePrompt.html' with element=element %}
-
         {% include 'core/elements/postContainer.html' with element=element%}
     {% endfor %}
 
