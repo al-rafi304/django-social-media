@@ -1,0 +1,27 @@
+a{
+    text-decoration: none;
+}
+a.name-link{
+    color: black
+}
+a.name-link:hover{
+    text-decoration: underline;
+}
+
+.bg-light{
+    background-color: #FFFFFF !important;
+}
+.bg-light-secondary{
+    background-color: #F0F2F5;
+}
+
+.btn-light{
+    background-color: #FFFFFF !important;
+}
+.btn-light-secondary{
+    background-color: #F0F2F5;
+}
+
+.btn-light:hover{
+    background-color: #F0F2F5 !important;
+}
