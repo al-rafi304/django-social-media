@@ -20,20 +20,11 @@
 
         <!-- Navbar -->
         {% if request.user.is_authenticated %}
-            <nav class="navbar navbar-expand-lg sticky-top shadow-sm border" style="background-color: #ffffff;">
+            <nav class="navbar navbar-expand-md sticky-top shadow-sm border" style="background-color: #ffffff;">
                 <div class="container">
                     <a class="navbar-brand text-dark" href="{% url 'home' %}">UnSocial</a>
                     
-                    <!-- Search Bar -->
-                    <ul class="navbar-nav w-100 justify-content-center">
-                        <li class="nav-item">
-                            {% comment %} <form class="d-flex" role="search" method='GET' action="{% url 'all_products' %}"> {% endcomment %}
-                            <form class="d-flex ps-5 ms-4" role="search" method='GET' action = "{% url 'search' %}">
-                                <input class="form-control me-2 border-0 rounded-pill" type="search" name='search' placeholder="Search" aria-label="Search" style="width: 500px; background-color: #F0F2F5">
-                                <button class="btn btn-outline-light visually-hidden" type="submit">Search</button>
-                            </form>
-                        </li>
-                    </ul>
+                    
 
 
                     <!-- Toggle Button -->
@@ -43,10 +34,20 @@
 
                     <!-- Right Side -->
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <!-- Search Bar -->
+                        <ul class="navbar-nav ms-auto py-sm-2 py-lg-0">
+                            <li class="nav-item">
+                                {% comment %} <form class="d-flex" role="search" method='GET' action="{% url 'all_products' %}"> {% endcomment %}
+                                <form class="" role="search" method='GET' action = "{% url 'search' %}">
+                                    <input class="form-control me-2 border-0 rounded-pill" type="search" name='search' placeholder="Search" aria-label="Search" style="width: 500px; background-color: #F0F2F5">
+                                    <button class="btn btn-outline-light visually-hidden" type="submit">Search</button>
+                                </form>
+                            </li>
+                        </ul>
                         <ul class="navbar-nav ms-auto">
 
                             <!-- User Profile Icon -->
-                            <li class="nav-item border-0 rounded-4 bg-light-secondary">
+                            <li class="nav-item border-0 rounded-4 bg-light-secondary me-auto">
                                 <div class="dropdown border-1 rounded-4">
                                     <button class="btn btn-link dropdown-toggle rounded-circle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none; color:inherit;"  >
                                         <img src="{{ request.user.profile_img.url }}" alt="User Profile Image" class="rounded-circle border-0 object-fit-cover" width="30" height="30">
