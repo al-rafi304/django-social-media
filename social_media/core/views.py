@@ -118,6 +118,9 @@ def removePost(request, post_id):
 def sharePost(request, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
+
+        if post.privacy == post.FOLLOWERS:
+            return
         
         new_post = Post()
         new_post.account = request.user

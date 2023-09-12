@@ -163,14 +163,16 @@
             </a>
             
             <!--Share Button-->
-            <a type='button' class='col btn btn-light border-0 rounded-3 shareBtn'>
-                <i class="bi bi-share"></i>
-                <span class='share-count-span'>
-                    {% if element.post.shareCount > 0 %}
-                        {{ element.post.shareCount|custom_number_format }}
-                    {% endif %}
-                </span>
-            </a>
+            {% if element.post.privacy != element.post.FOLLOWERS %}
+                <a type='button' class='col btn btn-light border-0 rounded-3 shareBtn'>
+                    <i class="bi bi-share"></i>
+                    <span class='share-count-span'>
+                        {% if element.post.shareCount > 0 %}
+                            {{ element.post.shareCount|custom_number_format }}
+                        {% endif %}
+                    </span>
+                </a>
+            {% endif %}
         </div>
         
         <hr class='mt-0'>
