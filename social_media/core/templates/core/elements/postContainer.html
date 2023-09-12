@@ -1,6 +1,6 @@
 {% load time_diff %}
 
-<div>
+<div class='full-post-container'>
     <!--Post Share Prompt-->
     <div class='sharePrompt' style='display: none'>
         <div class='container border rounded-4 bg-light p-3 pb-2 shadow-sm' >
@@ -41,6 +41,33 @@
                     <br>
                     <span class='text-secondary'>@{{ element.post.account.username }}</span>
                 </div>
+                {% if element.post.account == request.user %}
+                <div class='col d-flex flex-row-reverse'>
+                    <a class='btn btn-light border-0 rounded-circle d-flex align-items-center text-secondary' href="" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots p-0 m-0 fs-5"></i>
+                    </a>
+                    <ul class="dropdown-menu ">
+                        <li >
+                            <form>
+                                {% csrf_token %}
+                                <button type='submit' class='d-flex justify-content-start w-100 btn btn-light border border-0 w-100 rounded-0'>
+                                    <i class="bi bi-pencil me-2"></i>
+                                    Edit
+                                </button>
+                            </form>
+                        </li>
+                        <li>
+                            <form method="POST" class='remove-post' action="{% url 'remove-post' post_id=element.post.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class='d-flex justify-content-start w-100 btn btn-light border border-0 w-100 rounded-0 text-danger'>
+                                    <i class="bi bi-trash3 me-2"></i>
+                                    Delete Post
+                                </button>
+                            </form>
+                        </li>
+                      </ul>
+                </div>
+                {% endif %}
             </div>
 
             <!--Post Paragraph-->

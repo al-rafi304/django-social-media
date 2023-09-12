@@ -107,6 +107,14 @@ def post(request):
         })
 
 @login_required
+def removePost(request, post_id):
+    if request.method == "POST":
+        post = Post.objects.get(id=post_id)
+        post.delete()
+
+        return JsonResponse({})
+
+@login_required
 def sharePost(request, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)

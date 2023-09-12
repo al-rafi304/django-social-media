@@ -12,4 +12,6 @@ urlpatterns = [
     path('<int:comment_id>/comment-like', views.commentLike, name='comment-like'),
     path('followButton', views.followButton, name='follow-button'),
     path('post/<int:post_id>', views.postPage, name ='post-page'),
+    path('removePost/<int:post_id>', views.removePost, name ='remove-post'),
+    
 ]

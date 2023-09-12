@@ -275,6 +275,30 @@ $(document).ready(function() {
             }
         });
     });
+
+    //Removing Post with Ajax
+    $(document).on("submit", ".remove-post", function(e){
+        e.preventDefault();
+        
+        var form = $(this);
+        var url = form.attr('action');
+        var formData = new FormData(form[0]);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                var post = form.parents('.postContainer').parent('.full-post-container');
+                post.slideUp();
+
+                form[0].reset();
+            }
+        });
+    });
     
     // For formating like count numbers, just like the template tag
     function numberFormat(num) {
